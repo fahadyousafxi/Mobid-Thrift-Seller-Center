@@ -173,7 +173,7 @@ class AppWidgets {
 
   /// My Texts
   Widget myHeading1Text(String txt){
-    return Text(txt, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),);
+    return Text(txt, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),);
   }
   Widget myHeading2Text(String txt,{Color color = Colors.black}){
     return Text(txt, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),);

@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobidthrift_seller_center/constants/App_styles.dart';
+import 'package:mobidthrift_seller_center/login/seller_varification.dart';
 import 'package:mobidthrift_seller_center/login/verify_page.dart';
+import 'package:ndialog/ndialog.dart';
 import '../../constants/App_texts.dart';
 import '../constants/App_widgets.dart';
+import '../ui/Orders.dart';
 import '../utils/utils.dart';
 import 'Login_page.dart';
 
@@ -23,6 +30,7 @@ class _SignupPageState extends State<SignupPage> {
   late bool _loading = false;
   var _formKey = GlobalKey<FormState>();
 
+
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
@@ -31,6 +39,148 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _cNICController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+  bool buttonEnable = false;
+
+  bool shopImage = false;
+  bool cNICImage1 = false;
+  bool cNICImage2 = false;
+
+  String? downloadImageUrl;
+  String? downloadImageUrl1;
+  String? downloadImageUrl2;
+  File? pickedImage;
+  File? pickedImage1;
+  File? pickedImage2;
+  bool showLocalImage = false;
+
+  //******************************************//
+  // ************* Shop Image
+  //******************************************//
+
+  pickImageFrom(ImageSource fromGalleryOrCamera) async {
+    XFile? file = await ImagePicker()
+        .pickImage(source: fromGalleryOrCamera, imageQuality: 80);
+    if (file == null) {
+      return;
+    }
+
+    pickedImage = File(file.path);
+    showLocalImage = true;
+    setState(() {});
+    ProgressDialog progressDialog = ProgressDialog(
+      context,
+      title: const Text('Uploading !!!'),
+      message: const Text('Please wait'),
+    );
+    progressDialog.show();
+    try{
+      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      UploadTask uploadTask = FirebaseStorage.instance.ref().child('Seller_verification_images').child(fileName).putFile(pickedImage!);
+      TaskSnapshot snapshot = await uploadTask;
+      downloadImageUrl = await snapshot.ref.getDownloadURL();
+      print(downloadImageUrl);
+      // _fireStore.collection(collectionPath).doc(_firebaseAuth.currentUser?.uid.toString()).update({
+      //   'Profile_Image' : profileImageUrl,
+      // });
+      progressDialog.dismiss();
+      Utils.flutterToast(' Shop Image Uploaded ');
+      setState(() {
+        shopImage = true;
+
+      });
+    } catch( e ){
+      progressDialog.dismiss();
+      print(e.toString());
+      Utils.flutterToast(e.toString());
+    }
+
+  }
+
+  //******************************************//
+  // ************* CNIC 2
+  //******************************************//
+
+  cNIC2ImageFrom(ImageSource fromGalleryOrCamera) async {
+    XFile? file = await ImagePicker()
+        .pickImage(source: fromGalleryOrCamera, imageQuality: 80);
+    if (file == null) {
+      return;
+    }
+
+    pickedImage2 = File(file.path);
+    showLocalImage = true;
+    setState(() {});
+    ProgressDialog progressDialog = ProgressDialog(
+      context,
+      title: const Text('Uploading !!!'),
+      message: const Text('Please wait'),
+    );
+    progressDialog.show();
+    try{
+      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      UploadTask uploadTask = FirebaseStorage.instance.ref().child('Seller_verification_images').child(fileName).putFile(pickedImage2!);
+      TaskSnapshot snapshot = await uploadTask;
+      downloadImageUrl2 = await snapshot.ref.getDownloadURL();
+      print(downloadImageUrl2);
+      // _fireStore.collection(collectionPath).doc(_firebaseAuth.currentUser?.uid.toString()).update({
+      //   'Profile_Image' : profileImageUrl,
+      // });
+      progressDialog.dismiss();
+      Utils.flutterToast(' CNIC Image 1 Uploaded ');
+      setState(() {
+        cNICImage2 = true;
+      });
+    } catch( e ){
+      progressDialog.dismiss();
+      print(e.toString());
+      Utils.flutterToast(e.toString());
+    }
+
+  }
+
+
+  //******************************************//
+  // ************* CNIC 1
+  //******************************************//
+
+  cNIC1ImageFrom(ImageSource fromGalleryOrCamera) async {
+    XFile? file = await ImagePicker()
+        .pickImage(source: fromGalleryOrCamera, imageQuality: 80);
+    if (file == null) {
+      return;
+    }
+
+    pickedImage1 = File(file.path);
+    showLocalImage = true;
+    setState(() {});
+    ProgressDialog progressDialog = ProgressDialog(
+      context,
+      title: const Text('Uploading !!!'),
+      message: const Text('Please wait'),
+    );
+    progressDialog.show();
+    try{
+      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      UploadTask uploadTask = FirebaseStorage.instance.ref().child('Seller_verification_images').child(fileName).putFile(pickedImage1!);
+      TaskSnapshot snapshot = await uploadTask;
+      downloadImageUrl1 = await snapshot.ref.getDownloadURL();
+      print(downloadImageUrl1);
+      // _fireStore.collection(collectionPath).doc(_firebaseAuth.currentUser?.uid.toString()).update({
+      //   'Profile_Image' : profileImageUrl,
+      // });
+      progressDialog.dismiss();
+      Utils.flutterToast(' CNIC Image 2 Uploaded ');
+      setState(() {
+        cNICImage1 = true;
+      });
+    } catch( e ){
+      progressDialog.dismiss();
+      print(e.toString());
+      Utils.flutterToast(e.toString());
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +224,124 @@ class _SignupPageState extends State<SignupPage> {
 
                       SizedBox(
                         height: 20,
+                      ),
+
+
+                      Container(
+                          child: Column(
+                            children: [
+                              Text(
+                                'Upload The Shop Image',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Container(
+                                height: shopImage == false ? 30 : 70,
+                                decoration: BoxDecoration(
+                                  image: shopImage == false ? DecorationImage(
+                                    scale: 33,
+                                    image: AssetImage('assets/images/blank.png', )
+                                  ) : DecorationImage(
+                                      scale: 7,
+
+                                      image: Image.file(pickedImage!).image
+                                  )
+
+                                ),
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.blue,
+                                  splashRadius: 22,
+                                  onPressed: () {
+                                    bottomSheet(context, functionNumber: 1);
+                                  },
+                                  icon: Icon(
+                                    Icons.add_a_photo_outlined,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                      SizedBox(
+                        height: 15,
+                      ),
+
+                      Container(
+                          child: Column(
+                            children: [
+                              Text(
+                                'Upload your CNIC Images',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 2,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: cNICImage2 == false ? 30 : 70,
+                                    decoration: BoxDecoration(
+                                        image: cNICImage2 == false ? DecorationImage(
+                                            scale: 33,
+                                            image: AssetImage('assets/images/blank.png', )
+                                        ) : DecorationImage(
+                                            scale: 7,
+
+                                            image: Image.file(pickedImage2!).image
+                                        )
+
+                                    ),
+                                    child: IconButton(
+                                      splashColor: Colors.white,
+                                      highlightColor: Colors.blue,
+                                      splashRadius: 22,
+                                      onPressed: () {
+                                        bottomSheet(context, functionNumber: 2);
+
+                                      },
+                                      icon: Icon(
+                                        Icons.add_a_photo_outlined,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: cNICImage1 == false ? 30 : 70,
+                                    decoration: BoxDecoration(
+                                        image: cNICImage1 == false ? DecorationImage(
+                                            scale: 33,
+                                            image: AssetImage('assets/images/blank.png', )
+                                        ) : DecorationImage(
+                                            scale: 7,
+
+                                            image: Image.file(pickedImage1!).image
+                                        )
+
+                                    ),
+                                    child: IconButton(
+                                      splashColor: Colors.white,
+                                      highlightColor: Colors.blue,
+                                      splashRadius: 22,
+                                      onPressed: () {
+                                        bottomSheet(context, functionNumber: 3);
+
+                                      },
+                                      icon: Icon(
+                                        Icons.add_a_photo_outlined,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          )),
+                      SizedBox(
+                        height: 15,
                       ),
                       AppWidgets().myTextFormField(
                         hintText: 'Enter your Full Name',
@@ -189,34 +457,9 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
 
-                      Container(
-                          child: Column(
-                        children: [
-                          Text(
-                            'Upload The Shop Images',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                          IconButton(
-                            splashColor: Colors.white,
-                            highlightColor: Colors.blue,
-                            splashRadius: 22,
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.add_a_photo_outlined,
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      )),
                       SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
 
                       AppWidgets().myTextFormField(
@@ -227,7 +470,7 @@ class _SignupPageState extends State<SignupPage> {
                         validator: (String? txt) {
                           if (txt == null || txt.isEmpty) {
                             return "Please provide Password";
-                          } else if (txt.length > 6) {
+                          } else if (txt.length >= 6) {
                             return null;
                           } else {
                             return "Password must be 6 letters";
@@ -245,10 +488,12 @@ class _SignupPageState extends State<SignupPage> {
                           onPressed: () {
 
                             if(_formKey.currentState!.validate()){
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()));}
+                              mySignUp();
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => LoginPage()));
+                            }
                           },
                           btnText: "SignUp"),
                       Row(
@@ -280,6 +525,63 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   //******************************************//
+  // ************* bottom Sheet
+  //******************************************//
+
+  /// bottom Sheet
+  Future bottomSheet(context, {required int functionNumber}) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('With Camera'),
+                  onTap: () {
+                    if(functionNumber == 1){
+
+                      pickImageFrom(ImageSource.camera);
+
+                    }else if(functionNumber == 2){
+
+                      cNIC2ImageFrom(ImageSource.camera);
+
+                    }else{
+                      cNIC1ImageFrom(ImageSource.camera);
+                    }
+
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.storage),
+                  title: const Text('From Gallery'),
+                  onTap: () {
+                    if(functionNumber == 1){
+
+                      pickImageFrom(ImageSource.gallery);
+
+                    }else if(functionNumber == 2){
+
+                      cNIC2ImageFrom(ImageSource.gallery);
+
+                    }else{
+                      cNIC1ImageFrom(ImageSource.gallery);
+                    }
+
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  //******************************************//
   // ************* Sign up function
   //******************************************//
   mySignUp() {
@@ -292,7 +594,6 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         _loading = false;
       });
-
       _fireStore.doc(_firebaseAuth.currentUser?.uid.toString()).set({
         'Uid' : _firebaseAuth.currentUser?.uid.toString(),
         'Name' : _nameController.text.trim(),
@@ -304,7 +605,9 @@ class _SignupPageState extends State<SignupPage> {
         'CNIC_Number' : _cNICController.text.trim(),
         'Verification' : false,
         'Profile_Image' : "",
-        'Shop_Image1' : "",
+        'CNIC_Image1' : downloadImageUrl2,
+        'CNIC_Image2' : downloadImageUrl1,
+        'Shop_Image1' : downloadImageUrl,
 
 
       });
@@ -325,7 +628,54 @@ class _SignupPageState extends State<SignupPage> {
           MaterialPageRoute(
               builder: (context) => VerifyPage()));
     }).onError((error, stackTrace){
-      Utils.flutterToast(error.toString());
+      if(error.toString() == '[firebase_auth/email-already-in-use] The email address is already in use by another account.'){
+        print('asdfasdfasdfasdfasdf');
+        _firebaseAuth.signInWithEmailAndPassword(
+            email: _emailController.text.toString().trim(),
+            password: _passwordController.text.toString()).then((value){
+
+          _fireStore.doc(_firebaseAuth.currentUser?.uid.toString()).set({
+            'Uid' : _firebaseAuth.currentUser?.uid.toString(),
+            'Name' : _nameController.text.trim(),
+            'Email' : _emailController.text.trim(),
+            'Phone_Number' : _phoneController.text.trim(),
+            'Shop_Number' : _shopeNumberController.text.trim(),
+            'Plaza_Name' : _plazaNameController.text.trim(),
+            'Address' : _addressController.text.trim(),
+            'CNIC_Number' : _cNICController.text.trim(),
+            'Verification' : false,
+            'Profile_Image' : "",
+            'CNIC_Image1' : downloadImageUrl2,
+            'CNIC_Image2' : downloadImageUrl1,
+            'Shop_Image1' : downloadImageUrl,
+
+
+          });
+
+          setState(() {
+            _loading = false;
+          });
+          if(_firebaseAuth.currentUser!.emailVerified){
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SellerVerification()));
+          } else {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => VerifyPage()));
+          }
+
+        }).onError((error, stackTrace){
+          Utils.flutterToast(error.toString());
+          setState(() {
+            _loading = false;
+          });
+        });
+      }
+      Utils.flutterToast(error.toString() == '[firebase_auth/email-already-in-use] The email address is already in use by another account.' ? 'welcome as a seller also' : error.toString() );
+      print(error.toString());
       setState(() {
         _loading = false;
       });
