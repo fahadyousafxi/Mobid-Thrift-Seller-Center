@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/login/splash_screen.dart';
 import 'package:mobidthrift_seller_center/providers/seller_provider.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             primaryColor: Colors.black
         ),
-        home: const FirstPage(),
+        home: SplashScreen(),
       ),
     );
   }

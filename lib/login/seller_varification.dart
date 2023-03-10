@@ -21,15 +21,6 @@ class _SellerVerificationState extends State<SellerVerification> {
 
   @override
   void initState() {
-    user = _auth.currentUser;
-    user!.sendEmailVerification();
-
-    // timer = Timer.periodic(Duration(seconds: 3), (timer) {
-    //
-    //   // getName();
-    //
-    // });
-
     super.initState();
   }
 
@@ -83,16 +74,17 @@ class _SellerVerificationState extends State<SellerVerification> {
                           MaterialPageRoute(
                               builder: (context) => Orders()));
 
-                    }if(snapshot.data!['Name'] == 'fahad'){
-
-                      print('gooooooooooood');
-
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Orders()));
-
                     }
+                    // if(snapshot.data!['Name'] == 'fahad'){
+                    //
+                    //   print('gooooooooooood');
+                    //
+                    //   Navigator.pushReplacement(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => Orders()));
+                    //
+                    // }
 
                     return SizedBox();
                   }

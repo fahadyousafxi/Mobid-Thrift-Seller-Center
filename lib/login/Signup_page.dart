@@ -5,13 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobidthrift_seller_center/constants/App_styles.dart';
 import 'package:mobidthrift_seller_center/login/seller_varification.dart';
 import 'package:mobidthrift_seller_center/login/verify_page.dart';
 import 'package:ndialog/ndialog.dart';
+
 import '../../constants/App_texts.dart';
 import '../constants/App_widgets.dart';
-import '../ui/Orders.dart';
 import '../utils/utils.dart';
 import 'Login_page.dart';
 
@@ -23,13 +22,10 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-
-
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final  _fireStore = FirebaseFirestore.instance.collection('SellerCenterUsers');
+  final _fireStore = FirebaseFirestore.instance.collection('SellerCenterUsers');
   late bool _loading = false;
   var _formKey = GlobalKey<FormState>();
-
 
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -74,9 +70,13 @@ class _SignupPageState extends State<SignupPage> {
       message: const Text('Please wait'),
     );
     progressDialog.show();
-    try{
+    try {
       var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
-      UploadTask uploadTask = FirebaseStorage.instance.ref().child('Seller_verification_images').child(fileName).putFile(pickedImage!);
+      UploadTask uploadTask = FirebaseStorage.instance
+          .ref()
+          .child('Seller_verification_images')
+          .child(fileName)
+          .putFile(pickedImage!);
       TaskSnapshot snapshot = await uploadTask;
       downloadImageUrl = await snapshot.ref.getDownloadURL();
       print(downloadImageUrl);
@@ -87,14 +87,12 @@ class _SignupPageState extends State<SignupPage> {
       Utils.flutterToast(' Shop Image Uploaded ');
       setState(() {
         shopImage = true;
-
       });
-    } catch( e ){
+    } catch (e) {
       progressDialog.dismiss();
       print(e.toString());
       Utils.flutterToast(e.toString());
     }
-
   }
 
   //******************************************//
@@ -117,9 +115,13 @@ class _SignupPageState extends State<SignupPage> {
       message: const Text('Please wait'),
     );
     progressDialog.show();
-    try{
+    try {
       var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
-      UploadTask uploadTask = FirebaseStorage.instance.ref().child('Seller_verification_images').child(fileName).putFile(pickedImage2!);
+      UploadTask uploadTask = FirebaseStorage.instance
+          .ref()
+          .child('Seller_verification_images')
+          .child(fileName)
+          .putFile(pickedImage2!);
       TaskSnapshot snapshot = await uploadTask;
       downloadImageUrl2 = await snapshot.ref.getDownloadURL();
       print(downloadImageUrl2);
@@ -131,14 +133,12 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         cNICImage2 = true;
       });
-    } catch( e ){
+    } catch (e) {
       progressDialog.dismiss();
       print(e.toString());
       Utils.flutterToast(e.toString());
     }
-
   }
-
 
   //******************************************//
   // ************* CNIC 1
@@ -160,9 +160,13 @@ class _SignupPageState extends State<SignupPage> {
       message: const Text('Please wait'),
     );
     progressDialog.show();
-    try{
+    try {
       var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
-      UploadTask uploadTask = FirebaseStorage.instance.ref().child('Seller_verification_images').child(fileName).putFile(pickedImage1!);
+      UploadTask uploadTask = FirebaseStorage.instance
+          .ref()
+          .child('Seller_verification_images')
+          .child(fileName)
+          .putFile(pickedImage1!);
       TaskSnapshot snapshot = await uploadTask;
       downloadImageUrl1 = await snapshot.ref.getDownloadURL();
       print(downloadImageUrl1);
@@ -174,12 +178,11 @@ class _SignupPageState extends State<SignupPage> {
       setState(() {
         cNICImage1 = true;
       });
-    } catch( e ){
+    } catch (e) {
       progressDialog.dismiss();
       print(e.toString());
       Utils.flutterToast(e.toString());
     }
-
   }
 
   @override
@@ -226,120 +229,116 @@ class _SignupPageState extends State<SignupPage> {
                         height: 20,
                       ),
 
-
                       Container(
                           child: Column(
-                            children: [
-                              Text(
-                                'Upload The Shop Image',
-                                style: TextStyle(color: Colors.white),
+                        children: [
+                          Text(
+                            'Upload The Shop Image',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Container(
+                            height: shopImage == false ? 30 : 70,
+                            decoration: BoxDecoration(
+                                image: shopImage == false
+                                    ? DecorationImage(
+                                        scale: 33,
+                                        image: AssetImage(
+                                          'assets/images/blank.png',
+                                        ))
+                                    : DecorationImage(
+                                        scale: 7,
+                                        image: Image.file(pickedImage!).image)),
+                            child: IconButton(
+                              splashColor: Colors.white,
+                              highlightColor: Colors.blue,
+                              splashRadius: 22,
+                              onPressed: () {
+                                bottomSheet(context, functionNumber: 1);
+                              },
+                              icon: Icon(
+                                Icons.add_a_photo_outlined,
+                                color: Colors.white,
                               ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Container(
-                                height: shopImage == false ? 30 : 70,
-                                decoration: BoxDecoration(
-                                  image: shopImage == false ? DecorationImage(
-                                    scale: 33,
-                                    image: AssetImage('assets/images/blank.png', )
-                                  ) : DecorationImage(
-                                      scale: 7,
-
-                                      image: Image.file(pickedImage!).image
-                                  )
-
-                                ),
-                                child: IconButton(
-                                  splashColor: Colors.white,
-                                  highlightColor: Colors.blue,
-                                  splashRadius: 22,
-                                  onPressed: () {
-                                    bottomSheet(context, functionNumber: 1);
-                                  },
-                                  icon: Icon(
-                                    Icons.add_a_photo_outlined,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              )
-                            ],
-                          )),
+                            ),
+                          )
+                        ],
+                      )),
                       SizedBox(
                         height: 15,
                       ),
 
                       Container(
                           child: Column(
+                        children: [
+                          Text(
+                            'Upload your CNIC Images',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                'Upload your CNIC Images',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: cNICImage2 == false ? 30 : 70,
-                                    decoration: BoxDecoration(
-                                        image: cNICImage2 == false ? DecorationImage(
+                              Container(
+                                height: cNICImage2 == false ? 30 : 70,
+                                decoration: BoxDecoration(
+                                    image: cNICImage2 == false
+                                        ? DecorationImage(
                                             scale: 33,
-                                            image: AssetImage('assets/images/blank.png', )
-                                        ) : DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/blank.png',
+                                            ))
+                                        : DecorationImage(
                                             scale: 7,
-
-                                            image: Image.file(pickedImage2!).image
-                                        )
-
-                                    ),
-                                    child: IconButton(
-                                      splashColor: Colors.white,
-                                      highlightColor: Colors.blue,
-                                      splashRadius: 22,
-                                      onPressed: () {
-                                        bottomSheet(context, functionNumber: 2);
-
-                                      },
-                                      icon: Icon(
-                                        Icons.add_a_photo_outlined,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                            image: Image.file(pickedImage2!)
+                                                .image)),
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.blue,
+                                  splashRadius: 22,
+                                  onPressed: () {
+                                    bottomSheet(context, functionNumber: 2);
+                                  },
+                                  icon: Icon(
+                                    Icons.add_a_photo_outlined,
+                                    color: Colors.white,
                                   ),
-                                  Container(
-                                    height: cNICImage1 == false ? 30 : 70,
-                                    decoration: BoxDecoration(
-                                        image: cNICImage1 == false ? DecorationImage(
+                                ),
+                              ),
+                              Container(
+                                height: cNICImage1 == false ? 30 : 70,
+                                decoration: BoxDecoration(
+                                    image: cNICImage1 == false
+                                        ? DecorationImage(
                                             scale: 33,
-                                            image: AssetImage('assets/images/blank.png', )
-                                        ) : DecorationImage(
+                                            image: AssetImage(
+                                              'assets/images/blank.png',
+                                            ))
+                                        : DecorationImage(
                                             scale: 7,
-
-                                            image: Image.file(pickedImage1!).image
-                                        )
-
-                                    ),
-                                    child: IconButton(
-                                      splashColor: Colors.white,
-                                      highlightColor: Colors.blue,
-                                      splashRadius: 22,
-                                      onPressed: () {
-                                        bottomSheet(context, functionNumber: 3);
-
-                                      },
-                                      icon: Icon(
-                                        Icons.add_a_photo_outlined,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                            image: Image.file(pickedImage1!)
+                                                .image)),
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.blue,
+                                  splashRadius: 22,
+                                  onPressed: () {
+                                    bottomSheet(context, functionNumber: 3);
+                                  },
+                                  icon: Icon(
+                                    Icons.add_a_photo_outlined,
+                                    color: Colors.white,
                                   ),
-                                ],
-                              )
+                                ),
+                              ),
                             ],
-                          )),
+                          )
+                        ],
+                      )),
                       SizedBox(
                         height: 15,
                       ),
@@ -364,15 +363,14 @@ class _SignupPageState extends State<SignupPage> {
                         labelText: 'Email',
                         controller: _emailController,
                         validator: (String? txt) {
-                          bool emailValid = RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(txt!);
+                          bool emailValid = RegExp(
+                                  r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                              .hasMatch(txt!);
                           if (txt == null || txt.isEmpty) {
-
                             return "Please provide your Email";
-
                           }
-                          if(emailValid){
+                          if (emailValid) {
                             return null;
-
                           }
                           return "Your Email is Wrong";
                         },
@@ -486,13 +484,20 @@ class _SignupPageState extends State<SignupPage> {
 
                       AppWidgets().myElevatedBTN(
                           onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (cNICImage2 == true &&
+                                  shopImage == true &&
+                                  cNICImage1 == true) {
+                                mySignUp();
+                              } else {
+                                Utils.flutterToast(
+                                    'Upload Images Or wait for it');
+                              }
 
-                            if(_formKey.currentState!.validate()){
-                              mySignUp();
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => LoginPage()));
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) => LoginPage()));
                             }
                           },
                           btnText: "SignUp"),
@@ -541,15 +546,11 @@ class _SignupPageState extends State<SignupPage> {
                   leading: const Icon(Icons.camera_alt),
                   title: const Text('With Camera'),
                   onTap: () {
-                    if(functionNumber == 1){
-
+                    if (functionNumber == 1) {
                       pickImageFrom(ImageSource.camera);
-
-                    }else if(functionNumber == 2){
-
+                    } else if (functionNumber == 2) {
                       cNIC2ImageFrom(ImageSource.camera);
-
-                    }else{
+                    } else {
                       cNIC1ImageFrom(ImageSource.camera);
                     }
 
@@ -560,15 +561,11 @@ class _SignupPageState extends State<SignupPage> {
                   leading: const Icon(Icons.storage),
                   title: const Text('From Gallery'),
                   onTap: () {
-                    if(functionNumber == 1){
-
+                    if (functionNumber == 1) {
                       pickImageFrom(ImageSource.gallery);
-
-                    }else if(functionNumber == 2){
-
+                    } else if (functionNumber == 2) {
                       cNIC2ImageFrom(ImageSource.gallery);
-
-                    }else{
+                    } else {
                       cNIC1ImageFrom(ImageSource.gallery);
                     }
 
@@ -588,28 +585,28 @@ class _SignupPageState extends State<SignupPage> {
     setState(() {
       _loading = true;
     });
-    _firebaseAuth.createUserWithEmailAndPassword(
-        email: _emailController.text.toString().trim(),
-        password: _passwordController.text.toString()).then((value){
+    _firebaseAuth
+        .createUserWithEmailAndPassword(
+            email: _emailController.text.toString().trim(),
+            password: _passwordController.text.toString())
+        .then((value) {
       setState(() {
         _loading = false;
       });
       _fireStore.doc(_firebaseAuth.currentUser?.uid.toString()).set({
-        'Uid' : _firebaseAuth.currentUser?.uid.toString(),
-        'Name' : _nameController.text.trim(),
-        'Email' : _emailController.text.trim(),
-        'Phone_Number' : _phoneController.text.trim(),
-        'Shop_Number' : _shopeNumberController.text.trim(),
-        'Plaza_Name' : _plazaNameController.text.trim(),
-        'Address' : _addressController.text.trim(),
-        'CNIC_Number' : _cNICController.text.trim(),
-        'Verification' : false,
-        'Profile_Image' : "",
-        'CNIC_Image1' : downloadImageUrl2,
-        'CNIC_Image2' : downloadImageUrl1,
-        'Shop_Image1' : downloadImageUrl,
-
-
+        'Uid': _firebaseAuth.currentUser?.uid.toString(),
+        'Name': _nameController.text.trim(),
+        'Email': _emailController.text.trim(),
+        'Phone_Number': _phoneController.text.trim(),
+        'Shop_Number': _shopeNumberController.text.trim(),
+        'Plaza_Name': _plazaNameController.text.trim(),
+        'Address': _addressController.text.trim(),
+        'CNIC_Number': _cNICController.text.trim(),
+        'Verification': false,
+        'Profile_Image': "",
+        'CNIC_Image1': downloadImageUrl2,
+        'CNIC_Image2': downloadImageUrl1,
+        'Shop_Image1': downloadImageUrl,
       });
       // _firebaseAuth.currentUser?.sendEmailVerification();
 
@@ -624,64 +621,59 @@ class _SignupPageState extends State<SignupPage> {
       //     androidInstallApp: true),);
 
       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => VerifyPage()));
-    }).onError((error, stackTrace){
-      if(error.toString() == '[firebase_auth/email-already-in-use] The email address is already in use by another account.'){
+          context, MaterialPageRoute(builder: (context) => VerifyPage()));
+    }).onError((error, stackTrace) {
+      if (error.toString() ==
+          '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
         print('asdfasdfasdfasdfasdf');
-        _firebaseAuth.signInWithEmailAndPassword(
-            email: _emailController.text.toString().trim(),
-            password: _passwordController.text.toString()).then((value){
-
+        _firebaseAuth
+            .signInWithEmailAndPassword(
+                email: _emailController.text.toString().trim(),
+                password: _passwordController.text.toString())
+            .then((value) {
           _fireStore.doc(_firebaseAuth.currentUser?.uid.toString()).set({
-            'Uid' : _firebaseAuth.currentUser?.uid.toString(),
-            'Name' : _nameController.text.trim(),
-            'Email' : _emailController.text.trim(),
-            'Phone_Number' : _phoneController.text.trim(),
-            'Shop_Number' : _shopeNumberController.text.trim(),
-            'Plaza_Name' : _plazaNameController.text.trim(),
-            'Address' : _addressController.text.trim(),
-            'CNIC_Number' : _cNICController.text.trim(),
-            'Verification' : false,
-            'Profile_Image' : "",
-            'CNIC_Image1' : downloadImageUrl2,
-            'CNIC_Image2' : downloadImageUrl1,
-            'Shop_Image1' : downloadImageUrl,
-
-
+            'Uid': _firebaseAuth.currentUser?.uid.toString(),
+            'Name': _nameController.text.trim(),
+            'Email': _emailController.text.trim(),
+            'Phone_Number': _phoneController.text.trim(),
+            'Shop_Number': _shopeNumberController.text.trim(),
+            'Plaza_Name': _plazaNameController.text.trim(),
+            'Address': _addressController.text.trim(),
+            'CNIC_Number': _cNICController.text.trim(),
+            'Verification': false,
+            'Profile_Image': "",
+            'Total_Review_Rating': 0,
+            'Total_Number_of_Reviews': 0,
+            'CNIC_Image1': downloadImageUrl2,
+            'CNIC_Image2': downloadImageUrl1,
+            'Shop_Image1': downloadImageUrl,
           });
 
           setState(() {
             _loading = false;
           });
-          if(_firebaseAuth.currentUser!.emailVerified){
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SellerVerification()));
+          if (_firebaseAuth.currentUser!.emailVerified) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => SellerVerification()));
           } else {
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => VerifyPage()));
+                context, MaterialPageRoute(builder: (context) => VerifyPage()));
           }
-
-        }).onError((error, stackTrace){
+        }).onError((error, stackTrace) {
           Utils.flutterToast(error.toString());
           setState(() {
             _loading = false;
           });
         });
       }
-      Utils.flutterToast(error.toString() == '[firebase_auth/email-already-in-use] The email address is already in use by another account.' ? 'welcome as a seller also' : error.toString() );
+      Utils.flutterToast(error.toString() ==
+              '[firebase_auth/email-already-in-use] The email address is already in use by another account.'
+          ? 'welcome as a seller also'
+          : error.toString());
       print(error.toString());
       setState(() {
         _loading = false;
       });
     });
-
   }
-
-
 }
