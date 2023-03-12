@@ -4,8 +4,6 @@ import '../appbar/My_appbar.dart';
 import '../constants/App_colors.dart';
 import '../constants/App_widgets.dart';
 
-
-
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key}) : super(key: key);
 
@@ -14,8 +12,6 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-
-
   TextEditingController bidAmount = TextEditingController();
   var currentBid = 10.0;
   var myBid = 0.0;
@@ -36,7 +32,7 @@ class _ProductPageState extends State<ProductPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 22,
             ),
             Container(
@@ -50,12 +46,12 @@ class _ProductPageState extends State<ProductPage> {
                       //     MaterialPageRoute(
                       //         builder: (context) => SellerProfile()));
                     },
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       radius: 33,
                       child: Icon(Icons.image),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   Column(
@@ -96,12 +92,12 @@ class _ProductPageState extends State<ProductPage> {
                     'assets/images/phone.png',
                     height: 255,
                   ),
-                  Text('Iphone'),
+                  const Text('Iphone'),
                 ],
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left: 12, right: 12),
+              padding: const EdgeInsets.only(left: 12, right: 12),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,8 +109,7 @@ class _ProductPageState extends State<ProductPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
-                        Text('Shipping: Rs.200'),
+                        const Text('Shipping: Rs.200'),
                         // Column(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,8 +126,8 @@ class _ProductPageState extends State<ProductPage> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text('PTA Aproved'),
-                                Icon(
+                                const Text('PTA Aproved'),
+                                const Icon(
                                   Icons.done,
                                   color: Colors.green,
                                 )
@@ -198,7 +193,9 @@ class _ProductPageState extends State<ProductPage> {
                           onPressed: () {},
                           btnText: 'Buy it now: Rs.150000',
                           btnColor: AppColors.buttonColorBlue),
-                      SizedBox(height: 15,),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       // AppWidgets().myElevatedBTN(
                       //     btnWith: MediaQuery.of(context).size.width / 1,
                       //     btnHeight: 35.0,
@@ -208,7 +205,7 @@ class _ProductPageState extends State<ProductPage> {
                       AppWidgets().myHeading2Text('Discription: '),
                       AppWidgets().myNormalText(
                           '     Discription about the product for example:  Divice is good'),
-                      SizedBox(
+                      const SizedBox(
                         height: 12,
                       ),
                       AppWidgets().myHeading2Text('Specification: '),

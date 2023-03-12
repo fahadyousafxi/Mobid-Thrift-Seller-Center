@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
-import 'package:mobidthrift_seller_center/ui/Add%20Products/add_product_screen.dart';
+import 'package:mobidthrift_seller_center/chat_module/screens/chat_screen.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Bided_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Online_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Sold_Orders.dart';
@@ -16,7 +16,7 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
-   TabController? _tabController;
+  TabController? _tabController;
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
@@ -32,11 +32,10 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
         drawer: MyAppbar().myDrawer(context),
         body: Column(
           children: [
-
             TabBar(
               unselectedLabelColor: Colors.black,
               labelColor: Colors.blue,
-              tabs: [
+              tabs: const [
                 Tab(
                   // icon: Icon(Icons.check_circle),
                   child: Text('Online'),
@@ -44,7 +43,6 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                 Tab(
                   // icon: Icon(Icons.add),
                   child: Text('Sold'),
-
                 ),
                 Tab(
                   // icon: Icon(Icons.add),
@@ -53,16 +51,15 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
               ],
               controller: _tabController,
               indicatorSize: TabBarIndicatorSize.tab,
-
             ),
             Expanded(
               child: TabBarView(
-                children: [
+                controller: _tabController,
+                children: const [
                   OnlineOrders(),
                   SoldOrders(),
                   BidedOrders(),
                 ],
-                controller: _tabController,
               ),
             ),
           ],
@@ -71,14 +68,21 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
         bottomNavigationBar: Container(
           height: 60,
           width: double.infinity,
-          decoration: BoxDecoration(color: Colors.transparent),
+          decoration: const BoxDecoration(color: Colors.transparent),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               AppWidgets().myElevatedBTN(
-                  onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => AddProductScreen()));},
-                  btnText: 'Add Product',
-                  btnColor: AppColors.myRedColor)
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const ChatScreen(),
+                    ),
+                  );
+                },
+                btnText: 'Chat Screen',
+                btnColor: AppColors.myRedColor,
+              ),
             ],
           ),
         ),

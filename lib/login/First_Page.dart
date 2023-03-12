@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+
 import '../../constants/App_colors.dart';
-import '../../constants/App_widgets.dart';
 import '../../constants/App_texts.dart';
 import 'Login_page.dart';
 import 'Signup_page.dart';
@@ -21,8 +21,8 @@ class _FirstPageState extends State<FirstPage> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "${AppTexts.appName}",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          AppTexts.appName,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -31,7 +31,7 @@ class _FirstPageState extends State<FirstPage> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            child: Image(
+            child: const Image(
               image: AssetImage("assets/images/backgroundimage.png"),
               fit: BoxFit.cover,
             ),
@@ -42,11 +42,11 @@ class _FirstPageState extends State<FirstPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 33,
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 33,
                   ),
                   // AppWidgets().myElevatedBTN(onPressed: (){
@@ -56,22 +56,23 @@ class _FirstPageState extends State<FirstPage> {
                   //   //         builder: (context) => MyHomePage()));
                   // }, btnText: 'Continue without Login'),
 
-
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()));
                     },
-                    child: Text('Login'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.elevatedButtonColor,
-                      minimumSize: Size(200, 40),
+                      minimumSize: const Size(200, 40),
                     ),
+                    child: const Text('Login'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   ElevatedButton(
@@ -79,13 +80,13 @@ class _FirstPageState extends State<FirstPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SignupPage()));
+                              builder: (context) => const SignupPage()));
                     },
-                    child: Text('SignUp'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.elevatedButtonColor,
-                      minimumSize: Size(200, 40),
+                      minimumSize: const Size(200, 40),
                     ),
+                    child: const Text('SignUp'),
                   ),
                 ],
               ),

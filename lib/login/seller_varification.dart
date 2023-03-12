@@ -13,8 +13,6 @@ class SellerVerification extends StatefulWidget {
 }
 
 class _SellerVerificationState extends State<SellerVerification> {
-
-
   final _auth = FirebaseAuth.instance;
   User? user;
   Timer? timer;
@@ -23,15 +21,16 @@ class _SellerVerificationState extends State<SellerVerification> {
   void initState() {
     super.initState();
   }
+  // @override
+  // void dispose() {
+  //   timer!.cancel();
+  //   super.dispose();
+  // }
 
-  @override
-  void dispose() {
-    timer!.cancel();
-    super.dispose();
-  }
-
-  final  _fireStoreSnapshot = FirebaseFirestore.instance.collection('SellerCenterUsers').doc(FirebaseAuth.instance.currentUser?.uid).get();
-
+  final _fireStoreSnapshot = FirebaseFirestore.instance
+      .collection('SellerCenterUsers')
+      .doc(FirebaseAuth.instance.currentUser?.uid)
+      .get();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class _SellerVerificationState extends State<SellerVerification> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            child: Image(
+            child: const Image(
               image: AssetImage("assets/images/backgroundimage.png"),
               fit: BoxFit.cover,
             ),
@@ -57,46 +56,74 @@ class _SellerVerificationState extends State<SellerVerification> {
                   height: 2,
                   width: 2,
                   child: FutureBuilder<DocumentSnapshot>(
-                  future: _fireStoreSnapshot,
-                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-                    if(snapshot.connectionState == ConnectionState.waiting)
-                      return Center(child: CircularProgressIndicator(color: Colors.white,));
+                      future: _fireStoreSnapshot,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ));
+                        }
 
-                    if(snapshot.hasError)
-                      return Center(child: Text('Some Error'));
+                        if (snapshot.hasError) {
+                          return const Center(child: Text('Some Error'));
+                        }
 
+                        if (snapshot.data!['Verification'] == true) {
+                          print(
+                              'gooooooooooood           gooooooooooood        gooooooooooood');
 
-                    if(snapshot.data!['Verification'] == true){
-                      print('gooooooooooood           gooooooooooood        gooooooooooood');
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Orders()));
+                        }
+                        // if(snapshot.data!['Name'] == 'fahad'){
+                        //
+                        //   print('gooooooooooood');
+                        //
+                        //   Navigator.pushReplacement(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => Orders()));
+                        //
+                        // }
 
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Orders()));
-
-                    }
-                    // if(snapshot.data!['Name'] == 'fahad'){
-                    //
-                    //   print('gooooooooooood');
-                    //
-                    //   Navigator.pushReplacement(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => Orders()));
-                    //
-                    // }
-
-                    return SizedBox();
-                  }
-            ),
+                        return const SizedBox();
+                      }),
                 ),
-                Center(child: Text('Contact to the admin of MobidThrift to', style: TextStyle(color: Colors.white),),),
-                Center(child: Text('verify your account', style: TextStyle(color: Colors.white),),),
-                SizedBox(height: 11,),
-                Center(child: Text('OR', style: TextStyle(color: Colors.white, fontSize: 20),),),
-                SizedBox(height: 11,),
-                Center(child: Text('Wait upto 2 woking days', style: TextStyle(color: Colors.white),),),
-
+                const Center(
+                  child: Text(
+                    'Contact to the admin of MobidThrift to',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const Center(
+                  child: Text(
+                    'verify your account',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(
+                  height: 11,
+                ),
+                const Center(
+                  child: Text(
+                    'OR',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 11,
+                ),
+                const Center(
+                  child: Text(
+                    'Wait upto 2 woking days',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ],
             ),
           ),
@@ -117,41 +144,39 @@ class _SellerVerificationState extends State<SellerVerification> {
   //   }
   // }
 
-
-
-   // verification() {
-   //  FutureBuilder<DocumentSnapshot>(
-   //      future: _fireStoreSnapshot,
-   //      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
-   //        if(snapshot.connectionState == ConnectionState.waiting)
-   //          return Center(child: CircularProgressIndicator(color: Colors.white,));
-   //
-   //        if(snapshot.hasError)
-   //          return Center(child: Text('Some Error'));
-   //
-   //
-   //        if(snapshot.data!['Verification'] == true){
-   //
-   //          Navigator.pushReplacement(
-   //              context,
-   //              MaterialPageRoute(
-   //                  builder: (context) => Orders()));
-   //
-   //        }
-   //
-   //        return Expanded(
-   //          child: InkWell(
-   //            onTap: (){
-   //              // print(snapshot.data!['Verification'].toString());
-   //            },
-   //            child: Container(
-   //              height: 85,
-   //              width: 33,
-   //              color: Colors.amber,
-   //            ),
-   //          ),
-   //        );
-   //      }
-   //  );
+  // verification() {
+  //  FutureBuilder<DocumentSnapshot>(
+  //      future: _fireStoreSnapshot,
+  //      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+  //        if(snapshot.connectionState == ConnectionState.waiting)
+  //          return Center(child: CircularProgressIndicator(color: Colors.white,));
+  //
+  //        if(snapshot.hasError)
+  //          return Center(child: Text('Some Error'));
+  //
+  //
+  //        if(snapshot.data!['Verification'] == true){
+  //
+  //          Navigator.pushReplacement(
+  //              context,
+  //              MaterialPageRoute(
+  //                  builder: (context) => Orders()));
+  //
+  //        }
+  //
+  //        return Expanded(
+  //          child: InkWell(
+  //            onTap: (){
+  //              // print(snapshot.data!['Verification'].toString());
+  //            },
+  //            child: Container(
+  //              height: 85,
+  //              width: 33,
+  //              color: Colors.amber,
+  //            ),
+  //          ),
+  //        );
+  //      }
+  //  );
   // }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../Services/splash_service.dart';
-import '../constants/App_texts.dart';
-import '../constants/App_widgets.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -10,9 +10,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-
-  SplashService _splashService = SplashService();
+  final SplashService _splashService = SplashService();
 
   @override
   void initState() {
@@ -29,17 +27,22 @@ class _SplashScreenState extends State<SplashScreen> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            child: Image(
+            child: const Image(
               image: AssetImage("assets/images/backgroundimage.png"),
               fit: BoxFit.cover,
             ),
           ),
-          Center(
-            child: Text('Mobid Thrift Seller Center', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),)
-          ),
+          const Center(
+              child: Text(
+            'Mobid Thrift Seller Center',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          )),
         ],
       ),
     );
   }
 }
-

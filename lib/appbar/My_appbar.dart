@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/chat_module/screens/chat_screen.dart';
 import 'package:mobidthrift_seller_center/login/First_Page.dart';
 import 'package:mobidthrift_seller_center/ui/Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Profile.dart';
 import 'package:mobidthrift_seller_center/ui/Reviews_Page.dart';
 
 import '../constants/App_colors.dart';
-import '../login/Login_page.dart';
 import '../ui/About_Us.dart';
-import '../ui/Chat_Page.dart';
 import '../ui/Contact_Us.dart';
 import '../ui/Trade_In_Page.dart';
 import '../ui/Your_Cart.dart';
-
 
 class MyAppbar {
   /// My App Bar
@@ -20,7 +18,7 @@ class MyAppbar {
       backgroundColor: Colors.black,
       title: const Text("MobidThrift Seller Center"),
       centerTitle: true,
-      actions: [
+      actions: const [
         // IconButton(
         //     onPressed: () {
         //       // showSearch(context: context, delegate: SearchPage()),
@@ -35,7 +33,7 @@ class MyAppbar {
         //     },
         //     icon: Icon(Icons.shopping_cart)),
       ],
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(20),
         ),
@@ -51,7 +49,7 @@ class MyAppbar {
       title: Text(title),
       centerTitle: true,
       actions: [
-        myicon ?? SizedBox(),
+        myicon ?? const SizedBox(),
         // IconButton(
         //     onPressed: () {
         //       // Navigator.pushReplacement(
@@ -59,7 +57,7 @@ class MyAppbar {
         //     },
         //     icon: Icon(Icons.shopping_cart)),
       ],
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(20),
         ),
@@ -75,10 +73,10 @@ class MyAppbar {
         child: ListView(
           children: [
             DrawerHeader(
-                decoration: BoxDecoration(),
+                decoration: const BoxDecoration(),
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                         height: 85,
                         child: CircleAvatar(
                           radius: 48, // Image radius
@@ -87,7 +85,10 @@ class MyAppbar {
                         )),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ProfilePage()));
                       },
                       child: Text(
                         'Profile',
@@ -124,14 +125,13 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(
+              leading: const Icon(
                 Icons.sell,
               ),
-              title: Text('Orders'),
+              title: const Text('Orders'),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Orders()));
+                    MaterialPageRoute(builder: (context) => const Orders()));
               },
             ),
             Divider(
@@ -142,14 +142,13 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.stacked_line_chart),
-              title: Text('Trade In'),
+              leading: const Icon(Icons.stacked_line_chart),
+              title: const Text('Trade In'),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => TradeInPage()));
+                        builder: (context) => const TradeInPage()));
               },
             ),
             Divider(
@@ -160,14 +159,13 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.star),
-              title: Text('Reviews'),
+              leading: const Icon(Icons.star),
+              title: const Text('Reviews'),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ReviewsPage()));
+                        builder: (context) => const ReviewsPage()));
               },
             ),
             // Divider(
@@ -194,12 +192,11 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.shopping_cart),
-              title: Text('Cart'),
+              leading: const Icon(Icons.shopping_cart),
+              title: const Text('Cart'),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => YourCart()));
+                    MaterialPageRoute(builder: (context) => const YourCart()));
               },
             ),
 
@@ -211,12 +208,14 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.chat),
-              title: Text('Chat'),
+              leading: const Icon(Icons.chat),
+              title: const Text('Chat'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatPage()));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ChatScreen(),
+                  ),
+                );
               },
             ),
             // Divider(
@@ -235,8 +234,6 @@ class MyAppbar {
             //     //     MaterialPageRoute(builder: (context) => WishList()));
             //   },
             // ),
-
-
 
             // Divider(
             //   color: AppColors.drawerDividerColor,
@@ -262,12 +259,11 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.sticky_note_2_outlined),
-              title: Text('About Us'),
+              leading: const Icon(Icons.sticky_note_2_outlined),
+              title: const Text('About Us'),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AboutUs()));
+                    MaterialPageRoute(builder: (context) => const AboutUs()));
               },
             ),
             Divider(
@@ -278,12 +274,11 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.phone),
-              title: Text('Contact Us'),
+              leading: const Icon(Icons.phone),
+              title: const Text('Contact Us'),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ContactUs()));
+                    MaterialPageRoute(builder: (context) => const ContactUs()));
               },
             ),
             Divider(
@@ -294,11 +289,11 @@ class MyAppbar {
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,
-              leading: Icon(Icons.logout),
-              title: Text('Log Out'),
+              leading: const Icon(Icons.logout),
+              title: const Text('Log Out'),
               onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstPage()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const FirstPage()));
               },
             ),
             Divider(

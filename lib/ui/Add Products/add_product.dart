@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,7 +36,7 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController _shippingPriceController =
       TextEditingController();
 
-  var _myFormKey = GlobalKey<FormState>();
+  final _myFormKey = GlobalKey<FormState>();
   int? startingBid;
   int? productPrice;
   int? productShipping;
@@ -63,7 +65,7 @@ class _AddProductState extends State<AddProduct> {
     );
     progressDialog.show();
     try {
-      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      var fileName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
       UploadTask uploadTask = FirebaseStorage.instance
           .ref()
           .child('products_images')
@@ -100,7 +102,7 @@ class _AddProductState extends State<AddProduct> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Add Product Image'),
+                  const Text('Add Product Image'),
                   Center(
                     child: InkWell(
                       onTap: () {
@@ -114,7 +116,7 @@ class _AddProductState extends State<AddProduct> {
                           border: Border.all(color: Colors.black),
                           // image: DecorationImage(image: pickedImage != null ? Image.file(pickedImage!).image : NetworkImage(''))
                         ),
-                        child: Center(
+                        child: const Center(
                             child: Icon(
                           Icons.add_a_photo_outlined,
                           size: 33,
@@ -122,7 +124,7 @@ class _AddProductState extends State<AddProduct> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myTextFormField(
@@ -141,7 +143,7 @@ class _AddProductState extends State<AddProduct> {
                       hintColor: Colors.black,
                       borderSideColor: Colors.black,
                       textColor: Colors.black),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myTextFormField(
@@ -160,7 +162,7 @@ class _AddProductState extends State<AddProduct> {
                       hintColor: Colors.black,
                       borderSideColor: Colors.black,
                       textColor: Colors.black),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myTextFormField(
@@ -179,12 +181,12 @@ class _AddProductState extends State<AddProduct> {
                       hintColor: Colors.black,
                       borderSideColor: Colors.black,
                       textColor: Colors.black),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myTextFormField(
                     hintText: 'Enter a starting bid price',
-                    myType: TextInputType.numberWithOptions(),
+                    myType: const TextInputType.numberWithOptions(),
                     labelText: 'Starting Bid',
                     controller: _startingBidController,
                     fillColor: Colors.grey.shade300,
@@ -201,12 +203,12 @@ class _AddProductState extends State<AddProduct> {
                       return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myTextFormField(
                     hintText: 'Enter total price',
-                    myType: TextInputType.numberWithOptions(),
+                    myType: const TextInputType.numberWithOptions(),
                     labelText: 'Total Price',
                     controller: _productPriceController,
                     fillColor: Colors.grey.shade300,
@@ -223,12 +225,12 @@ class _AddProductState extends State<AddProduct> {
                       return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myTextFormField(
                     hintText: 'Enter the shipping price',
-                    myType: TextInputType.numberWithOptions(),
+                    myType: const TextInputType.numberWithOptions(),
                     labelText: 'Shipping Price',
                     controller: _shippingPriceController,
                     fillColor: Colors.grey.shade300,
@@ -246,13 +248,13 @@ class _AddProductState extends State<AddProduct> {
                       return null;
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("PTA Approved"),
+                      const Text("PTA Approved"),
                       Switch(
                           value: ptaApproved,
                           onChanged: (bool) {
@@ -263,23 +265,23 @@ class _AddProductState extends State<AddProduct> {
                             });
                           }),
                       ptaApproved == true
-                          ? Icon(
+                          ? const Icon(
                               Icons.check,
                               color: Colors.green,
                             )
-                          : Icon(
+                          : const Icon(
                               Icons.error_outline,
                               color: Colors.red,
                             ),
                       Text(ptaApproved == false ? 'No' : 'Yes'),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   AppWidgets().myElevatedBTN(
                       onPressed: () {
-                        print('' + _titleController.text);
+                        print('${_titleController.text}');
                         if (imageUploaded == true) {
                           if (_myFormKey.currentState!.validate()) {
                             if (buttonEnable == false) {
@@ -321,7 +323,7 @@ class _AddProductState extends State<AddProduct> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Orders()));
+                                        builder: (context) => const Orders()));
                               }).onError((error, stackTrace) {
                                 Utils.flutterToast(error.toString());
                                 setState(() {
