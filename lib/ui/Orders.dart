@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
-import 'package:mobidthrift_seller_center/chat_module/screens/chat_screen.dart';
+import 'package:mobidthrift_seller_center/ui/Add%20Products/add_product_screen.dart';
+// import 'package:mobidthrift_seller_center/chat_module/screens/chat_screen.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Bided_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Online_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Sold_Orders.dart';
@@ -74,11 +75,16 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             children: [
               AppWidgets().myElevatedBTN(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const ChatScreen(),
-                    ),
-                  );
+                  print('hi');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddProductScreen()));
+                  // Navigator.push(context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>  AddProductScreen(),
+                  //   ),
+                  // );
                 },
                 btnText: 'Chat Screen',
                 btnColor: AppColors.myRedColor,

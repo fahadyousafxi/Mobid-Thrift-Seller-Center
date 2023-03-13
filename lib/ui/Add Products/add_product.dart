@@ -24,9 +24,17 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+  final ImagePicker _picker = ImagePicker();
+  List<XFile> _selectedFiles = [];
+  FirebaseStorage _storageRef = FirebaseStorage.instance;
+  List<String> _imagesUrls = [];
+  int uploadItem = 0;
+  bool _isUploading = false;
+
   final _fireStore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance.currentUser;
 
+  bool isStartingBid = true;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _productSpecificationController =
       TextEditingController();
@@ -102,28 +110,119 @@ class _AddProductState extends State<AddProduct> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text('Add Product Image'),
-                  Center(
-                    child: InkWell(
-                      onTap: () {
-                        bottomSheet(context);
-                      },
-                      child: Container(
-                        height: 100,
-                        width: 180,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22),
-                          border: Border.all(color: Colors.black),
-                          // image: DecorationImage(image: pickedImage != null ? Image.file(pickedImage!).image : NetworkImage(''))
+                  _isUploading
+                      ? showLoading()
+                      : Column(
+                          children: [
+                            const Text('Add Product Image'),
+                            Center(
+                              child: _selectedFiles.isEmpty
+                                  ? InkWell(
+                                      onTap: () {
+                                        if (_selectedFiles != null) {
+                                          _selectedFiles.clear();
+                                        }
+                                        selectImages();
+                                      },
+                                      child: Container(
+                                        height: 100,
+                                        width: 180,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(22),
+                                          border:
+                                              Border.all(color: Colors.black),
+                                          // image: DecorationImage(image: pickedImage != null ? Image.file(pickedImage!).image : NetworkImage(''))
+                                        ),
+                                        child: const Center(
+                                            child: Icon(
+                                          Icons.add_a_photo_outlined,
+                                          size: 33,
+                                        )),
+                                      ),
+                                    )
+                                  : Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              height: 100,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  1.4,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    _selectedFiles.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10),
+                                                    child: Image.file(
+                                                      File(_selectedFiles[index]
+                                                          .path),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                    onPressed: () {
+                                                      if (_selectedFiles !=
+                                                          null) {
+                                                        _selectedFiles.clear();
+                                                        _imagesUrls.clear();
+                                                      }
+                                                      imageUploaded = false;
+                                                      setState(() {});
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.delete_forever,
+                                                      color: Colors.red,
+                                                    )),
+                                                IconButton(
+                                                    onPressed: () {
+                                                      selectImages();
+                                                    },
+                                                    icon: Icon(
+                                                      Icons
+                                                          .add_a_photo_outlined,
+                                                      color: Colors.green,
+                                                    )),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        AppWidgets().myElevatedBTN(
+                                            onPressed: () {
+                                              if (_selectedFiles.isNotEmpty) {
+                                                uploadFunction(_selectedFiles);
+                                              } else {
+                                                Utils.flutterToast(
+                                                    'There is no images selected');
+                                              }
+                                            },
+                                            btnText: 'Upload Images',
+                                            btnColor: Colors.blue),
+                                      ],
+                                    ),
+                            ),
+                          ],
                         ),
-                        child: const Center(
-                            child: Icon(
-                          Icons.add_a_photo_outlined,
-                          size: 33,
-                        )),
-                      ),
-                    ),
-                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -184,25 +283,54 @@ class _AddProductState extends State<AddProduct> {
                   const SizedBox(
                     height: 10,
                   ),
-                  AppWidgets().myTextFormField(
-                    hintText: 'Enter a starting bid price',
-                    myType: const TextInputType.numberWithOptions(),
-                    labelText: 'Starting Bid',
-                    controller: _startingBidController,
-                    fillColor: Colors.grey.shade300,
-                    labelColor: Colors.black,
-                    hintColor: Colors.black,
-                    borderSideColor: Colors.black,
-                    textColor: Colors.black,
-                    validator: (String? txt) {
-                      if (txt == null || txt.isEmpty) {
-                        return "Please provide bid price";
-                      }
-
-                      startingBid = int.parse(_startingBidController.text);
-                      return null;
-                    },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Biding"),
+                      Switch(
+                          value: isStartingBid,
+                          onChanged: (bool) {
+                            setState(() {
+                              isStartingBid == false
+                                  ? isStartingBid = true
+                                  : isStartingBid = false;
+                            });
+                          }),
+                      isStartingBid == true
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.green,
+                            )
+                          : const Icon(
+                              Icons.clear,
+                              color: Colors.red,
+                            ),
+                      Text(isStartingBid == false ? 'Off' : 'On'),
+                    ],
                   ),
+                  isStartingBid == false
+                      ? SizedBox()
+                      : AppWidgets().myTextFormField(
+                          hintText: 'Enter a starting bid price',
+                          myType: const TextInputType.numberWithOptions(),
+                          labelText: 'Starting Bid',
+                          controller: _startingBidController,
+                          fillColor: Colors.grey.shade300,
+                          labelColor: Colors.black,
+                          hintColor: Colors.black,
+                          borderSideColor: Colors.black,
+                          textColor: Colors.black,
+                          validator: (String? txt) {
+                            if (txt == null || txt.isEmpty) {
+                              startingBid = 0;
+                              return null;
+                            }
+
+                            startingBid =
+                                int.parse(_startingBidController.text);
+                            return null;
+                          },
+                        ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -301,7 +429,9 @@ class _AddProductState extends State<AddProduct> {
                                   .collection(collectionName)
                                   .doc(docUid)
                                   .set({
-                                'productImage1': downloadImageUrl.toString(),
+                                'productImages': _imagesUrls,
+                                'productImage1': _imagesUrls[0],
+                                'IsStartingBid': isStartingBid,
                                 'productCollectionName': collectionName,
                                 'productName': _titleController.text.toString(),
                                 'productCurrentBid': startingBid,
@@ -351,33 +481,100 @@ class _AddProductState extends State<AddProduct> {
   }
 
   /// bottom Sheet
-  Future bottomSheet(context) {
-    return showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.camera_alt),
-                  title: const Text('With Camera'),
-                  onTap: () {
-                    pickImageFrom(ImageSource.camera);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.storage),
-                  title: const Text('From Gallery'),
-                  onTap: () {
-                    pickImageFrom(ImageSource.gallery);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          );
-        });
+  // Future bottomSheet(context) {
+  //   return showModalBottomSheet(
+  //       context: context,
+  //       builder: (context) {
+  //         return SafeArea(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               ListTile(
+  //                 leading: const Icon(Icons.camera_alt),
+  //                 title: const Text('With Camera'),
+  //                 onTap: () {
+  //                   pickImageFrom(ImageSource.camera);
+  //                   Navigator.pop(context);
+  //                 },
+  //               ),
+  //               ListTile(
+  //                 leading: const Icon(Icons.storage),
+  //                 title: const Text('From Gallery'),
+  //                 onTap: () {
+  //                   pickImageFrom(ImageSource.gallery);
+  //                   Navigator.pop(context);
+  //                 },
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
+
+  Widget showLoading() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+              "uploading :  ${uploadItem.toString()}/${_selectedFiles.length.toString()}"),
+          SizedBox(
+            height: 22,
+          ),
+          CircularProgressIndicator()
+        ],
+      ),
+    );
+  }
+
+  void uploadFunction(List<XFile> _images) {
+    setState(() {
+      _isUploading = true;
+    });
+    for (int i = 0; i < _images.length; i++) {
+      uploadFile(_images[i]);
+    }
+  }
+
+  Future<String> uploadFile(XFile _image) async {
+    final _auth = FirebaseAuth.instance.currentUser;
+    Reference reference = _storageRef
+        .ref()
+        .child('products_images')
+        .child(_auth!.uid.toString() + 'products')
+        .child(_image.name);
+    UploadTask uploadTask = reference.putFile(File(_image.path));
+    await uploadTask.whenComplete(() {
+      setState(() {
+        uploadItem++;
+        if (uploadItem == _selectedFiles.length) {
+          _isUploading = false;
+
+          imageUploaded = true;
+          Utils.flutterToast('uploaded');
+          uploadItem = 0;
+        }
+      });
+    });
+    String downloadURL = await reference.getDownloadURL();
+    print('************************ url ****************************');
+    print(downloadURL);
+
+    _imagesUrls.add(downloadURL.toString());
+
+    return downloadURL;
+  }
+
+  Future<void> selectImages() async {
+    try {
+      final List<XFile> imgs = await _picker.pickMultiImage(imageQuality: 70);
+      if (imgs!.isNotEmpty) {
+        _selectedFiles.addAll(imgs);
+      }
+      print('the legth of list: ${imgs.length.toString()}');
+    } catch (e) {
+      print('Something Went Wrong${e.toString()}');
+    }
+    setState(() {});
   }
 }

@@ -120,7 +120,7 @@ class _SellerVerificationState extends State<SellerVerification> {
                 ),
                 const Center(
                   child: Text(
-                    'Wait upto 2 woking days',
+                    'Wait upto 2 working days',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
