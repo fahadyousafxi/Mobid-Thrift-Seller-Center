@@ -45,7 +45,7 @@ class _AddProductState extends State<AddProduct> {
       TextEditingController();
 
   final _myFormKey = GlobalKey<FormState>();
-  int? startingBid;
+  int? startingBid = 0;
   int? productPrice;
   int? productShipping;
   bool ptaApproved = false;
