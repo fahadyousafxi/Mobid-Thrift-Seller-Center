@@ -86,7 +86,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                   //   ),
                   // );
                 },
-                btnText: 'Chat Screen',
+                btnText: 'Add Product',
                 btnColor: AppColors.myRedColor,
               ),
             ],
