@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/login/First_Page.dart';
-import 'package:mobidthrift_seller_center/ui/Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Profile.dart';
 import 'package:mobidthrift_seller_center/ui/Reviews_Page.dart';
 
 import '../constants/App_colors.dart';
-import '../login/Login_page.dart';
 import '../ui/About_Us.dart';
 import '../ui/Chat_Page.dart';
 import '../ui/Contact_Us.dart';
 import '../ui/Trade_In_Page.dart';
 import '../ui/Your_Cart.dart';
-
 
 class MyAppbar {
   /// My App Bar
@@ -87,7 +84,10 @@ class MyAppbar {
                         )),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfilePage()));
                       },
                       child: Text(
                         'Profile',
@@ -130,8 +130,8 @@ class MyAppbar {
               title: Text('Orders'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Orders()));
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => Orders()));
               },
             ),
             Divider(
@@ -146,10 +146,8 @@ class MyAppbar {
               title: Text('Trade In'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TradeInPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TradeInPage()));
               },
             ),
             Divider(
@@ -164,10 +162,8 @@ class MyAppbar {
               title: Text('Reviews'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReviewsPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ReviewsPage()));
               },
             ),
             // Divider(
@@ -236,8 +232,6 @@ class MyAppbar {
             //   },
             // ),
 
-
-
             // Divider(
             //   color: AppColors.drawerDividerColor,
             //   height: 1,
@@ -298,7 +292,8 @@ class MyAppbar {
               title: Text('Log Out'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FirstPage()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => FirstPage()));
               },
             ),
             Divider(

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
 import 'package:mobidthrift_seller_center/ui/Add%20Products/add_product_screen.dart';
@@ -75,7 +76,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
             children: [
               AppWidgets().myElevatedBTN(
                 onPressed: () {
-                  print('hi');
+                  print(FirebaseAuth.instance.currentUser!.uid);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
