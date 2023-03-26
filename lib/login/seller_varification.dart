@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mobidthrift_seller_center/ui/Orders.dart';
+
+import '../ui/Orders.dart';
 
 class SellerVerification extends StatefulWidget {
   const SellerVerification({Key? key}) : super(key: key);
@@ -14,8 +13,6 @@ class SellerVerification extends StatefulWidget {
 
 class _SellerVerificationState extends State<SellerVerification> {
   final _auth = FirebaseAuth.instance;
-  User? user;
-  Timer? timer;
 
   @override
   void initState() {
@@ -53,8 +50,8 @@ class _SellerVerificationState extends State<SellerVerification> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 2,
-                  width: 2,
+                  // height: 222,
+                  // width: 222,
                   child: FutureBuilder<DocumentSnapshot>(
                       future: _fireStoreSnapshot,
                       builder: (BuildContext context,
@@ -71,15 +68,6 @@ class _SellerVerificationState extends State<SellerVerification> {
                           return const Center(child: Text('Some Error'));
                         }
 
-                        if (snapshot.data!['Verification'] == true) {
-                          print(
-                              'gooooooooooood           gooooooooooood        gooooooooooood');
-
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Orders()));
-                        }
                         // if(snapshot.data!['Name'] == 'fahad'){
                         //
                         //   print('gooooooooooood');
@@ -91,8 +79,26 @@ class _SellerVerificationState extends State<SellerVerification> {
                         //
                         // }
 
-                        return const SizedBox();
+                        if (snapshot.hasData) {
+                          bool verf = snapshot.data!['Verification'];
+                          if (verf == true) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Orders()));
+                                },
+                                child: Text('Continue'));
+                          }
+                        }
+
+                        return const Text('Error');
                       }),
+                ),
+                SizedBox(
+                  height: 11,
                 ),
                 const Center(
                   child: Text(

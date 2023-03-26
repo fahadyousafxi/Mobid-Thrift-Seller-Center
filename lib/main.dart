@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/login/splash_screen.dart';
 import 'package:mobidthrift_seller_center/providers/product_accepting_provider.dart';
 import 'package:mobidthrift_seller_center/providers/seller_products_provider.dart';
 import 'package:mobidthrift_seller_center/providers/seller_provider.dart';
-import 'package:mobidthrift_seller_center/ui/Orders.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Mobid Thrift',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.black),
-        home: Orders(),
+        home: SplashScreen(),
       ),
     );
   }
