@@ -174,6 +174,7 @@ class _OnlineOrdersState extends State<OnlineOrders> {
                                     builder: (BuildContext context) {
                                       return AlertDialog(
                                         title: const Text('Conformation!!'),
+                                        //Are you sure to delete the following recrods from the lists
                                         content: Text('Are you sure to delete'),
                                         actions: [
                                           TextButton(
