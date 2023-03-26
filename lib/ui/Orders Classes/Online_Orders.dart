@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class _OnlineOrdersState extends State<OnlineOrders> {
   SellerProductProvider sellerProductProvider = SellerProductProvider();
   ProductAcceptingProvider productAcceptingProvider =
       ProductAcceptingProvider();
+  final _firebaseStorage = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -55,11 +57,14 @@ class _OnlineOrdersState extends State<OnlineOrders> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 0, right: 50, left: 50),
-            child: SizedBox(
-              // height: productAcceptingProvider
-              //         .getProductAcceptingDataList.isNotEmpty
-              //     ? 330
-              //     : 0,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.blue, width: 2)),
+              height: productAcceptingProvider
+                      .getProductAcceptingDataList.isNotEmpty
+                  ? size.height / 2.5
+                  : 0,
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount:
@@ -68,54 +73,70 @@ class _OnlineOrdersState extends State<OnlineOrders> {
                   var data = productAcceptingProvider
                       .getProductAcceptingDataList[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 30, right: 0, left: 0),
-                    child: Card(
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(11.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
+                    children: [
+                      index == 0
+                          ? Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                      color: Colors.green, width: 2)),
+                              child: const Text('  Confirm And Deliver  '))
+                          : SizedBox(
+                              height: 10,
+                            ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 10, right: 0, left: 0),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(11.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
                               children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text('Removeasdfsadfs'),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: Text('Removeasdfsadfs'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: Text('Edit'),
+                                    ),
+                                  ],
                                 ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text('Edit'),
+                                SizedBox(
+                                  height: 142,
+                                  child: Image(
+                                    // The Data will be loaded from firebse
+                                    image: NetworkImage(data.productImage1!),
+                                    // fit: BoxFit.cover,
+                                  ),
                                 ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(data.productName!),
+                                SizedBox(
+                                  height: 11,
+                                ),
+                                Text(data.productDescription.toString()),
+                                Text('Price: Rs.${data.productPrice}'),
+                                // Text('1 Day time left '),
                               ],
                             ),
-                            SizedBox(
-                              height: 142,
-                              child: Image(
-                                // The Data will be loaded from firebse
-                                image: NetworkImage(data.productImage1!),
-                                // fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(data.productName!),
-                            SizedBox(
-                              height: 11,
-                            ),
-                            Text('Product discription'),
-                            Text('Rs.1000 is current bid '),
-                            Text('1 Day time left '),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   );
                 },
               ),
@@ -147,7 +168,28 @@ class _OnlineOrdersState extends State<OnlineOrders> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('Conformation!!'),
+                                        content: Text('Are you sure to delete'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('No')),
+                                          TextButton(
+                                              onPressed: () {},
+                                              child: Text('Yes'))
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  // _firebaseStorage.collection(data.productCollectionName.toString()).doc(data.productUid).delete();
+                                },
                                 child: Text('Remove'),
                               ),
                               TextButton(
@@ -168,9 +210,9 @@ class _OnlineOrdersState extends State<OnlineOrders> {
                           SizedBox(
                             height: 11,
                           ),
-                          Text('Product discription'),
-                          Text('Rs.1000 is current bid '),
-                          Text('1 Day time left '),
+                          Text(data.productDescription.toString()),
+                          Text('Price: Rs.${data.productPrice}'),
+                          // Text('1 Day time left '),
                         ],
                       ),
                     ),
