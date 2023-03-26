@@ -16,9 +16,11 @@ class ProductAcceptingModel {
   DateTime? bidDateTimeLeft;
   bool? productPTAApproved;
   bool? isStartingBid;
+  bool? productAccepted;
   List<String>? imagesList;
 
   ProductAcceptingModel({
+    this.productAccepted,
     this.isStartingBid,
     this.bidEndTimeInSeconds,
     this.imagesList,

@@ -13,6 +13,10 @@ class ProductAcceptingProvider with ChangeNotifier {
     QuerySnapshot productAcceptingData = await FirebaseFirestore.instance
         .collection("SoldProducts")
         .where('ShopKeeperUid', isEqualTo: _auth)
+        .where(
+          'Accepted',
+          isEqualTo: false,
+        )
         .get();
 
     for (var element in productAcceptingData.docs) {
@@ -28,6 +32,7 @@ class ProductAcceptingProvider with ChangeNotifier {
         productPTAApproved: element.get("ProductPTAApproved"),
         buyerUid: element.get("BuyerUid"),
         sellerStatus: element.get("SellerStatus"),
+        productAccepted: element.get("Accepted"),
       );
       newList.add(cartModel);
     }
