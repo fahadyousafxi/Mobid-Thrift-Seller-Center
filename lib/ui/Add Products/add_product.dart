@@ -8,7 +8,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
-import 'package:mobidthrift_seller_center/ui/Orders.dart';
 import 'package:ndialog/ndialog.dart';
 
 import '../../constants/App_colors.dart';
@@ -24,6 +23,28 @@ class AddProduct extends StatefulWidget {
 }
 
 class _AddProductState extends State<AddProduct> {
+  int currentTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  int bidEndTimeInSeconds =
+      432000 + (DateTime.now().millisecondsSinceEpoch ~/ 1000);
+  List<DropdownMenuItem<int>> get dropdownItems {
+    List<DropdownMenuItem<int>> menuItems = [
+      DropdownMenuItem(child: Text("1 day"), value: 86400),
+      DropdownMenuItem(child: Text("2 days"), value: 172800),
+      DropdownMenuItem(child: Text("3 days"), value: 259200),
+      DropdownMenuItem(child: Text("4 days"), value: 345600),
+      DropdownMenuItem(child: Text("5 days"), value: 432000),
+      DropdownMenuItem(child: Text("6 days"), value: 518400),
+      DropdownMenuItem(child: Text("10 days"), value: 864000),
+      DropdownMenuItem(child: Text("15 days"), value: 1296000),
+      DropdownMenuItem(child: Text("20 days"), value: 1728000),
+      DropdownMenuItem(child: Text("30 days"), value: 2592000),
+      DropdownMenuItem(child: Text("40 days"), value: 3456000),
+      DropdownMenuItem(child: Text("50 days"), value: 4320000),
+      DropdownMenuItem(child: Text("60 days"), value: 5184000),
+    ];
+    return menuItems;
+  }
+
   final ImagePicker _picker = ImagePicker();
   List<XFile> _selectedFiles = [];
   FirebaseStorage _storageRef = FirebaseStorage.instance;
@@ -310,26 +331,89 @@ class _AddProductState extends State<AddProduct> {
                   ),
                   isStartingBid == false
                       ? SizedBox()
-                      : AppWidgets().myTextFormField(
-                          hintText: 'Enter a starting bid price',
-                          myType: const TextInputType.numberWithOptions(),
-                          labelText: 'Starting Bid',
-                          controller: _startingBidController,
-                          fillColor: Colors.grey.shade300,
-                          labelColor: Colors.black,
-                          hintColor: Colors.black,
-                          borderSideColor: Colors.black,
-                          textColor: Colors.black,
-                          validator: (String? txt) {
-                            if (txt == null || txt.isEmpty) {
-                              startingBid = 0;
-                              return null;
-                            }
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: AppWidgets().myTextFormField(
+                                hintText: 'Enter a starting bid price',
+                                myType: const TextInputType.numberWithOptions(),
+                                labelText: 'Starting Bid',
+                                controller: _startingBidController,
+                                fillColor: Colors.grey.shade300,
+                                labelColor: Colors.black,
+                                hintColor: Colors.black,
+                                borderSideColor: Colors.black,
+                                textColor: Colors.black,
+                                validator: (String? txt) {
+                                  if (txt == null || txt.isEmpty) {
+                                    startingBid = 0;
+                                    return null;
+                                  }
 
-                            startingBid =
-                                int.parse(_startingBidController.text);
-                            return null;
-                          },
+                                  startingBid =
+                                      int.parse(_startingBidController.text);
+                                  return null;
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 11,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 90,
+                              color: Colors.grey.shade300,
+                              child: DropdownButtonFormField<int>(
+                                value: 432000,
+                                items: dropdownItems,
+                                // List.generate(
+                                //     31,
+                                //     (index) =>
+                                // DropdownMenuItem(
+                                //           child: Text('${index + 1}'),
+                                //           value: '${index + 1}',
+                                //         )),
+
+                                onChanged: (int? value) {
+                                  bidEndTimeInSeconds = currentTime + value!;
+                                  print(bidEndTimeInSeconds);
+                                },
+
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 5),
+                                  // hintStyle: GoogleFonts.dmSans(
+                                  //   fontWeight: FontWeight.w500,
+                                  //   fontSize: 15.,
+                                  //   color: Color(0xffACA9A9),
+                                  // ),
+                                  fillColor: Colors.transparent,
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 2, color: Colors.black),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 2, color: Colors.black),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 2, color: Colors.black),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                   const SizedBox(
                     height: 10,
@@ -445,16 +529,17 @@ class _AddProductState extends State<AddProduct> {
                                 'productShipping': productShipping,
                                 'productUid': docUid.toString(),
                                 'productShopkeeperUid': _auth!.uid.toString(),
-                                'BidEndTimeInSeconds'
+                                'BidEndTimeInSeconds': bidEndTimeInSeconds,
                               }).then((value) {
                                 setState(() {
                                   progressDialog.dismiss();
                                 });
                                 Utils.flutterToast('Product has been uploaded');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Orders()));
+                                Navigator.pop(context);
+                                // Navigator.pushReplacement(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => const Orders()));
                               }).onError((error, stackTrace) {
                                 Utils.flutterToast(error.toString());
                                 setState(() {
