@@ -445,6 +445,7 @@ class _AddProductState extends State<AddProduct> {
                                 'productShipping': productShipping,
                                 'productUid': docUid.toString(),
                                 'productShopkeeperUid': _auth!.uid.toString(),
+                                'BidEndTimeInSeconds'
                               }).then((value) {
                                 setState(() {
                                   progressDialog.dismiss();
