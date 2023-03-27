@@ -1,19 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../providers/user_provider.dart';
 import 'message_bubble.dart';
 
-class Messages extends StatelessWidget {
-  final String? name;
-  final String? uId;
+class Messages extends StatefulWidget {
+  final String? sellerName;
+  final String? sellerUid;
 
-  Messages({super.key, this.name, this.uId});
+  const Messages({super.key, this.sellerName, this.sellerUid});
 
-  final userId = FirebaseAuth.instance.currentUser;
+  @override
+  State<Messages> createState() => _MessagesState();
+}
+
+class _MessagesState extends State<Messages> {
+  @override
+  void initState() {
+    Provider.of<UserProvider>(context, listen: false).dataUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserProvider>(context, listen: false).userUid;
+
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection('chat')
@@ -26,15 +38,16 @@ class Messages extends StatelessWidget {
           );
         }
         final chatDocs = snapshot.data!.docs;
+
         return ListView.builder(
           reverse: true,
           itemCount: chatDocs.length,
           itemBuilder: (context, index) => MessageBubble(
             message: chatDocs[index]['text'],
-            isMe: chatDocs[index]['userId'] == userId!.uid,
-            username: chatDocs[index]['username'],
-            sellerName: name!,
-            isSell: chatDocs[index]['sellerId'] == uId,
+            isMe: chatDocs[index]['sellerId'] == widget.sellerUid,
+            sellerName: widget.sellerName!,
+            isSell: chatDocs[index]['userId'] == userData![index],
+            username: chatDocs[index]['userName'],
             myKey: ValueKey(chatDocs[index].id),
           ),
         );

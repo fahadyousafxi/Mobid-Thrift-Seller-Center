@@ -5,10 +5,10 @@ import '../widgets/chat/messages.dart';
 import '../widgets/chat/new_messages.dart';
 
 class ChatScreen extends StatefulWidget {
-  final String? uId;
-  final String? name;
+  final String? sellerUid;
+  final String? sellerName;
 
-  const ChatScreen({super.key, this.uId, this.name});
+  const ChatScreen({super.key, this.sellerUid, this.sellerName});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -23,14 +23,14 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: Messages(
-              name: widget.name,
-              uId: widget.uId,
               key: widget.key,
+              sellerUid: widget.sellerUid,
+              sellerName: widget.sellerName,
             ),
           ),
           NewMessages(
-            sellerName: widget.name,
-            sellerUid: widget.uId,
+            sellerUid: widget.sellerUid,
+            sellerName: widget.sellerName,
           ),
         ],
       ),

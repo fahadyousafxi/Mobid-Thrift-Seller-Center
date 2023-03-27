@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class NewMessages extends StatefulWidget {
   final String? sellerName;
@@ -16,21 +17,17 @@ class _NewMessagesState extends State<NewMessages> {
   var _enteredMessage = '';
   final TextEditingController _messagesController = TextEditingController();
 
+  var index = 0;
   Future<void> _sendMessage() async {
     FocusScope.of(context).unfocus();
 
-    final user = FirebaseAuth.instance.currentUser;
-
-    final userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .get();
+    var userData = Provider.of<UserProvider>(context).dataUser();
 
     FirebaseFirestore.instance.collection('chat').add({
       'text': _enteredMessage,
       'createdAt': Timestamp.now(),
-      'userId': user.uid,
-      'username': userData['Name'],
+      'userId': userData.elementAt(index).uId,
+      'username': userData.elementAt(index).name,
       'sellerId': widget.sellerUid,
       'sellerName': widget.sellerName,
     });
