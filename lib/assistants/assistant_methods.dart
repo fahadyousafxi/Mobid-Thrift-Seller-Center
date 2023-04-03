@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../models/directions_model.dart';
 import '../providers/app_info_provider.dart';
 
-String mapKey = 'AIzaSyAG2LS9DWgKSrmf920KNkhlOy3nb_2MA1w';
+String mapKey = 'AIzaSyDlxVyj8MF2wYmydJa66K2c8YK9A4Z0d60';
 
 class AssistantMethods {
   static Future<String> reverseGeocoding(Position position, context) async {
