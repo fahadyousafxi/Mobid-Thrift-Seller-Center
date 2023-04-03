@@ -1,16 +1,24 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobidthrift_seller_center/login/seller_varification.dart';
 import 'package:mobidthrift_seller_center/login/verify_page.dart';
 import 'package:ndialog/ndialog.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/App_texts.dart';
+import '../assistants/assistant_methods.dart';
 import '../constants/App_widgets.dart';
+import '../providers/app_info_provider.dart';
 import '../utils/utils.dart';
 import 'Login_page.dart';
 
@@ -22,19 +30,19 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance.collection('SellerCenterUsers');
   late bool _loading = false;
-  var _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _shopeNumberController = TextEditingController();
-  TextEditingController _plazaNameController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _cNICController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _shopeNumberController = TextEditingController();
+  final TextEditingController _plazaNameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _cNICController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool buttonEnable = false;
 
@@ -49,6 +57,225 @@ class _SignupPageState extends State<SignupPage> {
   File? pickedImage1;
   File? pickedImage2;
   bool showLocalImage = false;
+
+  final Completer<GoogleMapController> _googleMapController =
+      Completer<GoogleMapController>();
+
+  GoogleMapController? newGoogleMapController;
+  LocationPermission? _locationPermission;
+  Position? sellerCurrentPosition;
+  bool isLoading = false;
+
+  allowLocationPermission() async {
+    _locationPermission = await Geolocator.requestPermission();
+    if (_locationPermission == LocationPermission.denied) {
+      _locationPermission = await Geolocator.requestPermission();
+    }
+  }
+
+  userLocation() async {
+    setState(() {
+      isLoading = true;
+    });
+    Position currentPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    sellerCurrentPosition = currentPosition;
+
+    LatLng latLng = LatLng(
+      sellerCurrentPosition!.latitude,
+      sellerCurrentPosition!.longitude,
+    );
+
+    CameraPosition cameraPosition = CameraPosition(target: latLng, zoom: 14);
+
+    newGoogleMapController!.animateCamera(
+      CameraUpdate.newCameraPosition(
+        cameraPosition,
+      ),
+    );
+
+    await AssistantMethods.reverseGeocoding(sellerCurrentPosition!, context);
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
+
+  void mapDarkTheme() {
+    newGoogleMapController!.setMapStyle('''
+                    [
+                      {
+                        "elementType": "geometry",
+                        "stylers": [
+                          {
+                            "color": "#242f3e"
+                          }
+                        ]
+                      },
+                      {
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#746855"
+                          }
+                        ]
+                      },
+                      {
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                          {
+                            "color": "#242f3e"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "administrative.locality",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#d59563"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "poi",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#d59563"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "poi.park",
+                        "elementType": "geometry",
+                        "stylers": [
+                          {
+                            "color": "#263c3f"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "poi.park",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#6b9a76"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [
+                          {
+                            "color": "#38414e"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                          {
+                            "color": "#212a37"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#9ca5b3"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road.highway",
+                        "elementType": "geometry",
+                        "stylers": [
+                          {
+                            "color": "#746855"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road.highway",
+                        "elementType": "geometry.stroke",
+                        "stylers": [
+                          {
+                            "color": "#1f2835"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road.highway",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#f3d19c"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "transit",
+                        "elementType": "geometry",
+                        "stylers": [
+                          {
+                            "color": "#2f3948"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "transit.station",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#d59563"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [
+                          {
+                            "color": "#17263c"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "water",
+                        "elementType": "labels.text.fill",
+                        "stylers": [
+                          {
+                            "color": "#515c6d"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "water",
+                        "elementType": "labels.text.stroke",
+                        "stylers": [
+                          {
+                            "color": "#17263c"
+                          }
+                        ]
+                      }
+                    ]
+                ''');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    allowLocationPermission();
+  }
 
   //******************************************//
   // ************* Shop Image
@@ -71,7 +298,7 @@ class _SignupPageState extends State<SignupPage> {
     );
     progressDialog.show();
     try {
-      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      var fileName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
       UploadTask uploadTask = FirebaseStorage.instance
           .ref()
           .child('Seller_verification_images')
@@ -116,7 +343,7 @@ class _SignupPageState extends State<SignupPage> {
     );
     progressDialog.show();
     try {
-      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      var fileName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
       UploadTask uploadTask = FirebaseStorage.instance
           .ref()
           .child('Seller_verification_images')
@@ -161,7 +388,7 @@ class _SignupPageState extends State<SignupPage> {
     );
     progressDialog.show();
     try {
-      var fileName = DateTime.now().microsecondsSinceEpoch.toString() + '.jpg';
+      var fileName = '${DateTime.now().microsecondsSinceEpoch}.jpg';
       UploadTask uploadTask = FirebaseStorage.instance
           .ref()
           .child('Seller_verification_images')
@@ -187,20 +414,23 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    var locationData = Provider.of<AppInfoProvider>(context, listen: false)
+        .sellerPickUpLocation;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "${AppTexts.appName}",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          AppTexts.appName,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Container(
+          const SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: Image(
@@ -217,33 +447,28 @@ class _SignupPageState extends State<SignupPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 100,
-                      ),
+                      const SizedBox(height: 100),
                       Text('Create New Account',
                           style: TextStyle(color: Colors.grey.shade300)),
                       Text('Fill the form to continue',
                           style: TextStyle(color: Colors.grey.shade300)),
 
-                      SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
 
-                      Container(
-                          child: Column(
+                      Column(
                         children: [
-                          Text(
+                          const Text(
                             'Upload The Shop Image',
                             style: TextStyle(color: Colors.white),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 2,
                           ),
                           Container(
                             height: shopImage == false ? 30 : 70,
                             decoration: BoxDecoration(
                                 image: shopImage == false
-                                    ? DecorationImage(
+                                    ? const DecorationImage(
                                         scale: 33,
                                         image: AssetImage(
                                           'assets/images/blank.png',
@@ -258,26 +483,23 @@ class _SignupPageState extends State<SignupPage> {
                               onPressed: () {
                                 bottomSheet(context, functionNumber: 1);
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.add_a_photo_outlined,
                                 color: Colors.white,
                               ),
                             ),
                           )
                         ],
-                      )),
-                      SizedBox(
-                        height: 15,
                       ),
+                      const SizedBox(height: 15),
 
-                      Container(
-                          child: Column(
+                      Column(
                         children: [
-                          Text(
+                          const Text(
                             'Upload your CNIC Images',
                             style: TextStyle(color: Colors.white),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 2,
                           ),
                           Row(
@@ -287,7 +509,7 @@ class _SignupPageState extends State<SignupPage> {
                                 height: cNICImage2 == false ? 30 : 70,
                                 decoration: BoxDecoration(
                                     image: cNICImage2 == false
-                                        ? DecorationImage(
+                                        ? const DecorationImage(
                                             scale: 33,
                                             image: AssetImage(
                                               'assets/images/blank.png',
@@ -303,7 +525,7 @@ class _SignupPageState extends State<SignupPage> {
                                   onPressed: () {
                                     bottomSheet(context, functionNumber: 2);
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_a_photo_outlined,
                                     color: Colors.white,
                                   ),
@@ -313,7 +535,7 @@ class _SignupPageState extends State<SignupPage> {
                                 height: cNICImage1 == false ? 30 : 70,
                                 decoration: BoxDecoration(
                                     image: cNICImage1 == false
-                                        ? DecorationImage(
+                                        ? const DecorationImage(
                                             scale: 33,
                                             image: AssetImage(
                                               'assets/images/blank.png',
@@ -329,7 +551,7 @@ class _SignupPageState extends State<SignupPage> {
                                   onPressed: () {
                                     bottomSheet(context, functionNumber: 3);
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.add_a_photo_outlined,
                                     color: Colors.white,
                                   ),
@@ -338,8 +560,8 @@ class _SignupPageState extends State<SignupPage> {
                             ],
                           )
                         ],
-                      )),
-                      SizedBox(
+                      ),
+                      const SizedBox(
                         height: 15,
                       ),
                       AppWidgets().myTextFormField(
@@ -354,7 +576,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
@@ -375,7 +597,7 @@ class _SignupPageState extends State<SignupPage> {
                           return "Your Email is Wrong";
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
@@ -391,7 +613,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
@@ -407,7 +629,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
@@ -423,7 +645,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
@@ -439,7 +661,7 @@ class _SignupPageState extends State<SignupPage> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
 
@@ -456,9 +678,7 @@ class _SignupPageState extends State<SignupPage> {
                         },
                       ),
 
-                      SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
 
                       AppWidgets().myTextFormField(
                         obscureText: true,
@@ -475,12 +695,65 @@ class _SignupPageState extends State<SignupPage> {
                           }
                         },
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
+                      const SizedBox(height: 10),
 
                       // AppWidgets().myTextFormField(hintText: 'Confirm Password', labelText: 'Confirm Password'),
                       // SizedBox(height: 15,),
+                      SizedBox(
+                        height: 200,
+                        child: GoogleMap(
+                          mapType: MapType.normal,
+                          myLocationEnabled: true,
+                          zoomGesturesEnabled: false,
+                          zoomControlsEnabled: false,
+                          initialCameraPosition: _kGooglePlex,
+                          onMapCreated: (controller) {
+                            _googleMapController.complete(controller);
+                            newGoogleMapController = controller;
+
+                            userLocation();
+                            mapDarkTheme();
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        width: double.infinity,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.white12,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(width: 10),
+                            Flexible(
+                              child: isLoading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      locationData != null
+                                          ? locationData.locationName!
+                                          : 'Current Location',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 15),
 
                       AppWidgets().myElevatedBTN(
                           onPressed: () {
@@ -513,9 +786,10 @@ class _SignupPageState extends State<SignupPage> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => LoginPage()));
+                                        builder: (context) =>
+                                            const LoginPage()));
                               },
-                              child: Text('LogIn Now'))
+                              child: const Text('LogIn Now'))
                         ],
                       )
                     ],
@@ -582,6 +856,13 @@ class _SignupPageState extends State<SignupPage> {
   // ************* Sign up function
   //******************************************//
   mySignUp() {
+    var locationData = Provider.of<AppInfoProvider>(context, listen: false)
+        .sellerPickUpLocation;
+    dynamic locationAddress = LatLng(
+      locationData!.locationLatitude!,
+      locationData.locationLongitude!,
+    );
+    print(locationAddress);
     setState(() {
       _loading = true;
     });
@@ -607,6 +888,10 @@ class _SignupPageState extends State<SignupPage> {
         'CNIC_Image1': downloadImageUrl2,
         'CNIC_Image2': downloadImageUrl1,
         'Shop_Image1': downloadImageUrl,
+        'location_address': GeoPoint(
+          locationData.locationLatitude!,
+          locationData.locationLongitude!,
+        ),
       });
       // _firebaseAuth.currentUser?.sendEmailVerification();
 
@@ -621,7 +906,7 @@ class _SignupPageState extends State<SignupPage> {
       //     androidInstallApp: true),);
 
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => VerifyPage()));
+          context, MaterialPageRoute(builder: (context) => const VerifyPage()));
     }).onError((error, stackTrace) {
       if (error.toString() ==
           '[firebase_auth/email-already-in-use] The email address is already in use by another account.') {
@@ -653,11 +938,13 @@ class _SignupPageState extends State<SignupPage> {
             _loading = false;
           });
           if (_firebaseAuth.currentUser!.emailVerified) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => SellerVerification()));
-          } else {
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => VerifyPage()));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SellerVerification()));
+          } else {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const VerifyPage()));
           }
         }).onError((error, stackTrace) {
           Utils.flutterToast(error.toString());
