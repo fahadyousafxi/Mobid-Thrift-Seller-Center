@@ -888,10 +888,10 @@ class _SignupPageState extends State<SignupPage> {
         'CNIC_Image1': downloadImageUrl2,
         'CNIC_Image2': downloadImageUrl1,
         'Shop_Image1': downloadImageUrl,
-        'location_address': GeoPoint(
-          locationData.locationLatitude!,
-          locationData.locationLongitude!,
-        ),
+        'location_address': {
+          'latitude': locationData.locationLatitude!,
+          'longitude': locationData.locationLongitude!,
+        },
       });
       // _firebaseAuth.currentUser?.sendEmailVerification();
 
