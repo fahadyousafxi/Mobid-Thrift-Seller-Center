@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mobidthrif.mobidthriftsellercenter.mobidthrift_seller_center">
-   <application
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
         android:label="mobidthrift_seller_center"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -30,5 +34,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data
+           android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyDlxVyj8MF2wYmydJa66K2c8YK9A4Z0d60" />
     </application>
 </manifest>

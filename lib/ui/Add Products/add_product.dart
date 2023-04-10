@@ -654,7 +654,7 @@ class _AddProductState extends State<AddProduct> {
   Future<void> selectImages() async {
     try {
       final List<XFile> imgs = await _picker.pickMultiImage(imageQuality: 70);
-      if (imgs!.isNotEmpty) {
+      if (imgs.isNotEmpty) {
         _selectedFiles.addAll(imgs);
       }
       print('the legth of list: ${imgs.length.toString()}');

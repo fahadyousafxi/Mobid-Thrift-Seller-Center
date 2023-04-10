@@ -5,7 +5,7 @@ import '../ui/Product_page.dart';
 class AppWidgets {
   /// My Elevated Button
   Widget myElevatedBTN(
-      {required var onPressed,
+      {required VoidCallback? onPressed,
       required var btnText,
       Color btnColor = Colors.black,
       var btnWith = 200.0,
@@ -130,16 +130,16 @@ class AppWidgets {
   /// My Add Banner Container
   Widget myAddBannerContainer({required var height}) {
     return Container(
-      margin: EdgeInsets.only(left: 0, bottom: 0, right: 0),
+      margin: const EdgeInsets.only(left: 0, bottom: 0, right: 0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         border: Border.all(
           color: Colors.black,
         ),
         color: Colors.white,
       ),
       height: height,
-      child: Image(
+      child: const Image(
         // The Data will be loaded from firebse
         image: AssetImage("assets/images/adbanner.png"),
         // fit: BoxFit.cover,
@@ -157,14 +157,14 @@ class AppWidgets {
       children: [
         Text(
           categoryText,
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         TextButton(
             onPressed: onPressed,
             child: Text(
               textButtonText,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             )),
       ],
     );
@@ -174,7 +174,7 @@ class AppWidgets {
   Widget myHeading1Text(String txt) {
     return Text(
       txt,
-      style: TextStyle(
+      style: const TextStyle(
           fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
     );
   }
@@ -189,7 +189,7 @@ class AppWidgets {
   Widget myNormalText(String txt) {
     return Text(
       txt,
-      style: TextStyle(
+      style: const TextStyle(
           fontSize: 12, fontWeight: FontWeight.normal, color: Colors.black),
     );
   }
@@ -208,13 +208,15 @@ class AppWidgets {
           ),
           child: GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProductPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProductPage()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
-                  children: [
+                  children: const [
                     SizedBox(
                       height: 112,
                       child: Image(
@@ -232,7 +234,7 @@ class AppWidgets {
               )),
         ),
 
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
 
@@ -244,13 +246,15 @@ class AppWidgets {
           ),
           child: GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProductPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProductPage()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
-                  children: [
+                  children: const [
                     SizedBox(
                       height: 112,
                       child: Image(
@@ -268,7 +272,7 @@ class AppWidgets {
               )),
         ),
 
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
 
@@ -280,13 +284,15 @@ class AppWidgets {
           ),
           child: GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ProductPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProductPage()));
               },
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
-                  children: [
+                  children: const [
                     SizedBox(
                       height: 112,
                       child: Image(
