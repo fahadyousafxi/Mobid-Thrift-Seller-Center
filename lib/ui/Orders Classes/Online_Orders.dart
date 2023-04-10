@@ -185,10 +185,11 @@ class _OnlineOrdersState extends State<OnlineOrders> {
                                                                             'Please wait'),
                                                                   );
 
-                                                                  setState(() {
-                                                                    progressDialog
-                                                                        .show();
-                                                                  });
+                                                                  /// progress Dialog
+                                                                  // setState(() {
+                                                                  //   progressDialog
+                                                                  //       .show();
+                                                                  // });
                                                                   _firebaseStorage
                                                                       .collection(
                                                                           "Cart")

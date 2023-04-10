@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 class MessageBubble extends StatelessWidget {
   final String message;
   final String username;
-  final Key myKey;
+  // final Key myKey;
   final String sellerName;
-  final bool isSell;
+  // final bool isSell;
   final bool isMe;
 
   const MessageBubble({
     super.key,
     required this.message,
     required this.username,
-    required this.myKey,
+    // required this.myKey,
     required this.sellerName,
     required this.isMe,
-    required this.isSell,
+    // required this.isSell,
   });
 
   @override

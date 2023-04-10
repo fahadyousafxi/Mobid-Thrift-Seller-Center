@@ -82,53 +82,67 @@ class _SellerVerificationState extends State<SellerVerification> {
                         if (snapshot.hasData) {
                           bool verf = snapshot.data!['Verification'];
                           if (verf == true) {
-                            return ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Orders()));
-                                },
-                                child: Text('Continue'));
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const Orders()));
+                                      },
+                                      child: Text('Continue')),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  height: 11,
+                                ),
+                                const Center(
+                                  child: Text(
+                                    'Contact to the admin of MobidThrift to',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                const Center(
+                                  child: Text(
+                                    'verify your account',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 11,
+                                ),
+                                const Center(
+                                  child: Text(
+                                    'OR',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 11,
+                                ),
+                                const Center(
+                                  child: Text(
+                                    'Wait upto 2 working days',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            );
                           }
                         }
 
                         return const Text('Error');
                       }),
-                ),
-                SizedBox(
-                  height: 11,
-                ),
-                const Center(
-                  child: Text(
-                    'Contact to the admin of MobidThrift to',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const Center(
-                  child: Text(
-                    'verify your account',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const SizedBox(
-                  height: 11,
-                ),
-                const Center(
-                  child: Text(
-                    'OR',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
-                const SizedBox(
-                  height: 11,
-                ),
-                const Center(
-                  child: Text(
-                    'Wait upto 2 working days',
-                    style: TextStyle(color: Colors.white),
-                  ),
                 ),
               ],
             ),

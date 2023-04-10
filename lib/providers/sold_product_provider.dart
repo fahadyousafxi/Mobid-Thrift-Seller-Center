@@ -4,22 +4,22 @@ import 'package:flutter/cupertino.dart';
 
 import '../models/sold_product_model.dart';
 
-class ProductAcceptingProvider with ChangeNotifier {
+class SoldProductProvider with ChangeNotifier {
   final _auth = FirebaseAuth.instance.currentUser!.uid.toString();
-  List<SoldProductModel> productAcceptingDataList = [];
+  List<SoldProductModel> soldProductDataList = [];
 
-  void getProductAcceptingData() async {
+  void getSoldProductData() async {
     List<SoldProductModel> newList = [];
-    QuerySnapshot productAcceptingData = await FirebaseFirestore.instance
+    QuerySnapshot soldProductData = await FirebaseFirestore.instance
         .collection("SoldProducts")
         .where('ShopKeeperUid', isEqualTo: _auth)
         .where(
           'Accepted',
-          isEqualTo: false,
+          isEqualTo: true,
         )
         .get();
 
-    for (var element in productAcceptingData.docs) {
+    for (var element in soldProductData.docs) {
       SoldProductModel cartModel = SoldProductModel(
         productImage1: element.get("ProductImage"),
         productName: element.get("ProductName"),
@@ -36,11 +36,11 @@ class ProductAcceptingProvider with ChangeNotifier {
       );
       newList.add(cartModel);
     }
-    productAcceptingDataList = newList;
+    soldProductDataList = newList;
     notifyListeners();
   }
 
-  List<SoldProductModel> get getProductAcceptingDataList {
-    return productAcceptingDataList;
+  List<SoldProductModel> get getSoldProductDataList {
+    return soldProductDataList;
   }
 }

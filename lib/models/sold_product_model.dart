@@ -1,4 +1,4 @@
-class ProductAcceptingModel {
+class SoldProductModel {
   String? productImage1;
   String? productCollectionName;
   String? productName;
@@ -19,7 +19,7 @@ class ProductAcceptingModel {
   bool? productAccepted;
   List<String>? imagesList;
 
-  ProductAcceptingModel({
+  SoldProductModel({
     this.productAccepted,
     this.isStartingBid,
     this.bidEndTimeInSeconds,

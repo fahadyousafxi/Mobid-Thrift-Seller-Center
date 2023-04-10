@@ -916,6 +916,9 @@ class _SignupPageState extends State<SignupPage> {
                 email: _emailController.text.toString().trim(),
                 password: _passwordController.text.toString())
             .then((value) {
+          _firebaseAuth.currentUser
+              ?.updateDisplayName(_nameController.text.toString());
+
           _fireStore.doc(_firebaseAuth.currentUser?.uid.toString()).set({
             'Uid': _firebaseAuth.currentUser?.uid.toString(),
             'Name': _nameController.text.trim(),
@@ -932,6 +935,7 @@ class _SignupPageState extends State<SignupPage> {
             'CNIC_Image1': downloadImageUrl2,
             'CNIC_Image2': downloadImageUrl1,
             'Shop_Image1': downloadImageUrl,
+            'Followers': [''],
           });
 
           setState(() {

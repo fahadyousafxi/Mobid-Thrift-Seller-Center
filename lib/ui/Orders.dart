@@ -2,13 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
 import 'package:mobidthrift_seller_center/ui/Add%20Products/add_product_screen.dart';
-// import 'package:mobidthrift_seller_center/chat_module/screens/chat_screen.dart';
-import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Bided_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Online_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Sold_Orders.dart';
 
 import '../constants/App_colors.dart';
 import '../constants/App_widgets.dart';
+import 'Orders Classes/Bided_Orders.dart';
 
 class Orders extends StatefulWidget {
   const Orders({Key? key}) : super(key: key);
@@ -60,7 +59,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
                 children: const [
                   OnlineOrders(),
                   SoldOrders(),
-                  BidedOrders(),
+                  BiddingOrders(),
                 ],
               ),
             ),

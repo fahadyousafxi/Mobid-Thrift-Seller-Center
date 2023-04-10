@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/Chating/chats.dart';
 import 'package:mobidthrift_seller_center/login/First_Page.dart';
 import 'package:mobidthrift_seller_center/ui/Profile.dart';
 import 'package:mobidthrift_seller_center/ui/Reviews_Page.dart';
 
 import '../constants/App_colors.dart';
 import '../ui/About_Us.dart';
-import '../ui/Chat_Page.dart';
 import '../ui/Contact_Us.dart';
 import '../ui/Trade_In_Page.dart';
 import '../ui/Your_Cart.dart';
@@ -42,7 +42,9 @@ class MyAppbar {
 
   /// My Simple App Bar
   PreferredSizeWidget mySimpleAppBar(context,
-      {required String title, Widget myicon = const SizedBox()}) {
+      {required String title,
+      Widget myicon = const SizedBox(),
+      bool showCart = true}) {
     return AppBar(
       backgroundColor: Colors.black,
       title: Text(title),
@@ -215,8 +217,8 @@ class MyAppbar {
               title: const Text('Chat'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ChatPage()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Chats()));
               },
             ),
             // Divider(

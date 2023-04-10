@@ -7,6 +7,7 @@ class AppWidgets {
   Widget myElevatedBTN(
       {required VoidCallback? onPressed,
       required var btnText,
+      final bool loading = false,
       Color btnColor = Colors.black,
       var btnWith = 200.0,
       var btnHeight = 40.0}) {
@@ -16,7 +17,12 @@ class AppWidgets {
         backgroundColor: btnColor,
         minimumSize: Size(btnWith, btnHeight),
       ),
-      child: Text(btnText),
+      child: loading == true
+          ? const CircularProgressIndicator(
+              strokeWidth: 3,
+              color: Colors.white,
+            )
+          : Text(btnText),
     );
   }
 
