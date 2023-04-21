@@ -530,6 +530,8 @@ class _AddProductState extends State<AddProduct> {
                                 'productUid': docUid.toString(),
                                 'productShopkeeperUid': _auth!.uid.toString(),
                                 'BidEndTimeInSeconds': bidEndTimeInSeconds,
+                                "productSold": false,
+                                "productBuyer": ''
                               }).then((value) {
                                 setState(() {
                                   progressDialog.dismiss();
