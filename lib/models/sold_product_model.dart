@@ -8,6 +8,11 @@ class SoldProductModel {
   String? buyerUid;
   String? shopkeeperUid;
   String? sellerStatus;
+  String? buyerName;
+  String? buyerPhoneNumber;
+  String? buyerAddress;
+  String? buyerEmail;
+  String? accepted;
   int? productCurrentBid;
   int? bidEndTimeInSeconds;
   int? productShipping;
@@ -20,6 +25,12 @@ class SoldProductModel {
   List<String>? imagesList;
 
   SoldProductModel({
+    required this.buyerUid,
+    required this.buyerName,
+    required this.buyerEmail,
+    required this.buyerAddress,
+    required this.buyerPhoneNumber,
+    required this.accepted,
     this.productAccepted,
     this.isStartingBid,
     this.bidEndTimeInSeconds,
@@ -32,7 +43,6 @@ class SoldProductModel {
     this.productSpecification,
     this.productUid,
     this.shopkeeperUid,
-    this.buyerUid,
     this.productCurrentBid,
     this.productShipping,
     this.productPrice,

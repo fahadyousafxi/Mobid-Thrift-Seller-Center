@@ -33,6 +33,11 @@ class ProductAcceptingProvider with ChangeNotifier {
         buyerUid: element.get("BuyerUid"),
         sellerStatus: element.get("SellerStatus"),
         productAccepted: element.get("Accepted"),
+        buyerName: '',
+        buyerEmail: '',
+        buyerAddress: '',
+        buyerPhoneNumber: '',
+        accepted: '',
       );
       newList.add(cartModel);
     }
