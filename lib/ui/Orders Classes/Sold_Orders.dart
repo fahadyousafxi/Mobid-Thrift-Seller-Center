@@ -63,6 +63,7 @@ class _SoldOrdersState extends State<SoldOrders> {
                 child: Column(
                   children: [
                     Row(
+                      // done
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
