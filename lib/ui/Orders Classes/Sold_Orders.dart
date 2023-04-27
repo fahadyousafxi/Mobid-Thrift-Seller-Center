@@ -37,6 +37,7 @@ class _SoldOrdersState extends State<SoldOrders> {
   @override
   void deactivate() {
     soldProductProvider.getSearchProductsList.clear();
+    // TODO: implement deactivate
     super.deactivate();
   }
 
