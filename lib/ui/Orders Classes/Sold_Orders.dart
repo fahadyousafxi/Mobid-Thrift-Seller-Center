@@ -45,11 +45,14 @@ class _SoldOrdersState extends State<SoldOrders> {
   Widget build(BuildContext context) {
     soldProductProvider = Provider.of(context);
 
+    var size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: ListView.builder(
         itemCount: soldProductProvider.getSearchProductsList.length,
         itemBuilder: (BuildContext context, int index) {
           var data = soldProductProvider.getSearchProductsList[index];
+
           return Padding(
             padding: const EdgeInsets.only(top: 33, right: 33, left: 33),
             child: Card(
@@ -67,56 +70,81 @@ class _SoldOrdersState extends State<SoldOrders> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        data.accepted == ''
+                        data.buyerEmail == ''
                             ? TextButton(
                                 onPressed: () {
                                   showDialog(
                                       context: context,
-                                      builder: (context) {
-                                        return Center(
-                                          child: AlertDialog(
-                                            title: const Text('Confirmation!!'),
-                                            content: const Text(
-                                                'Do you want to accept'),
-                                            actions: [
-                                              TextButton(
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Please wait'),
+                                          //Are you sure to delete the following recrods from the lists
+                                          content: const Text(
+                                              'You accepted his bid but the buyer didn\'t pay yet'),
+                                          actions: [
+                                            TextButton(
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                                child: Text('Not Now'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  acceptingFunc(
-                                                      productUid: data
-                                                          .productUid
-                                                          .toString(),
-                                                      buyerUid: data.buyerUid
-                                                          .toString(),
-                                                      collectionName: data
-                                                          .productCollectionName
-                                                          .toString());
-                                                },
-                                                child: const Text('Yes Accept'),
-                                              ),
-                                            ],
-                                          ),
+                                                child: Text('Ok')),
+                                          ],
                                         );
                                       });
                                 },
-                                child: const Text(
-                                  'Accept',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              )
-                            : TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  'Accepted',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              ),
+                                child: Text('Buyer didn\'t pay yet'))
+                            : data.accepted == ''
+                                ? TextButton(
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return Center(
+                                              child: AlertDialog(
+                                                title: const Text(
+                                                    'Confirmation!!'),
+                                                content: const Text(
+                                                    'Do you want to accept'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text('Not Now'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                      acceptingFunc(
+                                                          productUid: data
+                                                              .productUid
+                                                              .toString(),
+                                                          buyerUid: data
+                                                              .buyerUid
+                                                              .toString(),
+                                                          collectionName: data
+                                                              .productCollectionName
+                                                              .toString());
+                                                    },
+                                                    child: const Text(
+                                                        'Yes Accept'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          });
+                                    },
+                                    child: const Text(
+                                      'Accept',
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                  )
+                                : TextButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      'Accepted',
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                  ),
                         data.accepted == ''
                             ? TextButton(
                                 onPressed: () {
@@ -184,10 +212,130 @@ class _SoldOrdersState extends State<SoldOrders> {
                                 ),
                               )
                             : SizedBox(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text('Receipt'),
-                        ),
+                        data.buyerEmail == ''
+                            ? SizedBox()
+                            : TextButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        elevation: 22,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Container(
+                                          height: 400,
+                                          width: size.width / 1.1,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15.0),
+                                              border: Border.all(
+                                                  color: Colors.blue, width: 3),
+                                              color: Colors.white),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // Row(children: [Text('data')],),
+
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      width: double.infinity,
+                                                    ),
+                                                    Icon(
+                                                      Icons.receipt_long,
+                                                      size: 40,
+                                                    ),
+                                                    Text(
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      'Take a Screen Shot',
+                                                      style: TextStyle(
+                                                          color: Colors.green),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                SizedBox(
+                                                  height: 22,
+                                                ),
+                                                Text(
+                                                    textAlign: TextAlign.center,
+                                                    'Product Name:  ${data.productName}'),
+                                                SizedBox(
+                                                  height: 22,
+                                                ),
+                                                Text(
+                                                    'Buyer Name:  ${data.buyerName}'),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+
+                                                Text(
+                                                    textAlign: TextAlign.center,
+                                                    'Buyer Email:  ${data.buyerEmail}'),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    'Buyer Phone Number:  ${data.buyerPhoneNumber}'),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    maxLines: 3,
+                                                    textAlign: TextAlign.center,
+                                                    'Buyer Address:  ${data.buyerAddress}'),
+                                                SizedBox(
+                                                  height: 35,
+                                                ),
+
+                                                Text(
+                                                    'Product Price:  ${data.productPrice}'),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+
+                                                Text(
+                                                    'Product Price:  ${data.productShipping}'),
+                                                Divider(
+                                                  thickness: 3,
+                                                ),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+
+                                                Text(
+                                                    'Total:  ${data.productPrice! + data.productShipping!}'),
+                                                Spacer(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    TextButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Text('Ok'))
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Text('Receipt'),
+                              ),
                       ],
                     ),
                     SizedBox(

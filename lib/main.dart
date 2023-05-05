@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/login/splash_screen.dart';
+import 'package:mobidthrift_seller_center/providers/Product_Provider.dart';
 import 'package:mobidthrift_seller_center/providers/app_info_provider.dart';
 import 'package:mobidthrift_seller_center/providers/bidding_product_provider.dart';
 import 'package:mobidthrift_seller_center/providers/chats_provider.dart';
@@ -52,6 +53,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<UserProvider>(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider<ProductsProvider>(
+          create: (context) => ProductsProvider(),
         ),
       ],
       child: MaterialApp(

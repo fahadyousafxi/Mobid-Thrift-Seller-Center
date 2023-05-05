@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/utils/utils.dart';
+import 'package:ndialog/ndialog.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/bidding_product_provider.dart';
@@ -62,7 +65,71 @@ class _BiddingOrdersState extends State<BiddingOrders> {
                           width: 60,
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (data.higherBidder != '') {
+                              ProgressDialog progressDialog2 = ProgressDialog(
+                                context,
+                                title: const Text('Product Accepting!!!'),
+                                message: const Text('Please wait'),
+                              );
+                              setState(() {});
+                              progressDialog2.show();
+                              await FirebaseFirestore.instance
+                                  .collection("Cart")
+                                  .doc(data.higherBidder)
+                                  .collection("YourCart")
+                                  .doc(data.productUid)
+                                  .set({
+                                "cartImage1": data.productImage1,
+                                // "cartImage2": cartImage2,
+                                // "cartImage3": cartImage3,
+                                // "cartImage4": cartImage4,
+                                // "cartImage5": cartImage5,
+                                // "cartImage6": cartImage6,
+                                "cartCollectionName":
+                                    data.productCollectionName,
+                                "cartName": data.productName,
+                                "cartDescription": data.productDescription,
+                                "cartSpecification": data.productSpecification,
+                                "cartUid": data.productUid,
+                                "cartShopkeeperUid": data.productShopkeeperUid,
+                                "cartCurrentBid": data.productCurrentBid,
+                                "cartShipping": data.productShipping,
+                                "cartPrice": data.productPrice,
+                                "cartDateTime": data.productDateTime,
+                                "bidDateTimeLeft": data.bidEndTimeInSeconds,
+                                "cartPTAApproved": data.productPTAApproved,
+                                'pleaseWait': 'To Pay',
+                                'SellerStatus': '',
+                              });
+                              await FirebaseFirestore.instance
+                                  .collection(
+                                      data.productCollectionName.toString())
+                                  .doc(data.productUid.toString())
+                                  .update({
+                                // "productSold": true,
+                                // "productBuyer": FirebaseAuth
+                                //     .instance.currentUser!.uid
+                                //     .toString()
+
+                                "productSold": true,
+                                "addedToCart": true,
+                                "Accepted": '',
+                                "BuyerAddress": '',
+                                "BuyerEmail": '',
+                                "BuyerName": '',
+                                "BuyerPhoneNumber": '',
+                              }).then((value) {
+                                progressDialog2.dismiss();
+                                Utils.flutterToast('Added to Cart!!');
+                              }).onError((error, stackTrace) {
+                                progressDialog2.dismiss();
+                                Utils.flutterToast(error.toString());
+                              });
+                            } else {
+                              Utils.flutterToast('No bid on your product');
+                            }
+                          },
                           child: Text('Accept'),
                         ),
                       ],
@@ -88,7 +155,7 @@ class _BiddingOrdersState extends State<BiddingOrders> {
                     ),
                     Text(data.productDescription!),
                     Text('Price: Rs.${data.productPrice!}'),
-                    Text('1 Day time left '),
+                    // Text('${data.higherBidder}'),
                   ],
                 ),
               ),

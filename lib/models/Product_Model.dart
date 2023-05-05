@@ -11,6 +11,7 @@ class ProductModel {
   String? productSpecification;
   String? productUid;
   String? productShopkeeperUid;
+  String? higherBidder;
   int? productCurrentBid;
   int? bidEndTimeInSeconds;
   int? productShipping;
@@ -25,6 +26,7 @@ class ProductModel {
     required this.isStartingBid,
     this.bidEndTimeInSeconds,
     this.imagesList,
+    this.higherBidder,
     this.productCollectionName,
     this.productImage1,
     this.productImage2,

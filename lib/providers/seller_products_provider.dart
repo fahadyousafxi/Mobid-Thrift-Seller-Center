@@ -39,6 +39,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("CellPhonesProducts")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -69,6 +70,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("PadsAndTabletsProducts")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -92,6 +94,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("LaptopsProducts")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -116,6 +119,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("SmartWatches")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -139,6 +143,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("Desktops")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -162,6 +167,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("Accessories")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -185,6 +191,7 @@ class SellerProductProvider with ChangeNotifier {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("Parts")
         .where('productShopkeeperUid', isEqualTo: _auth)
+        .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {

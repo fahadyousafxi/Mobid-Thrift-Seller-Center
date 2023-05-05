@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/Product_Model.dart';
 
-class BiddingProductProvider with ChangeNotifier {
+class ProductsProvider with ChangeNotifier {
+  final _firebaseFireStore = FirebaseFirestore.instance;
   ProductModel? productModel;
 
-  final String _auth = FirebaseAuth.instance.currentUser!.uid.toString();
   List<ProductModel> searchProductsList = [];
 
   productModels(QueryDocumentSnapshot element) {
@@ -15,7 +14,6 @@ class BiddingProductProvider with ChangeNotifier {
       productImage1: element.get("productImage1"),
       productShopkeeperUid: element.get("productShopkeeperUid"),
       productName: element.get("productName"),
-      higherBidder: element.get("higherBidder"),
       productDescription: element.get("productDescription"),
       productCurrentBid: element.get("productCurrentBid"),
       productUid: element.get("productUid"),
@@ -24,8 +22,8 @@ class BiddingProductProvider with ChangeNotifier {
       productShipping: element.get("productShipping"),
       productSpecification: element.get("productSpecification"),
       productPrice: element.get("productPrice"),
+      // bidEndTimeInSeconds: element.get("BidEndTimeInSeconds"),
       isStartingBid: element.get("IsStartingBid"),
-
       // imagesList: element.get("myList2"),
       // bidDateTimeLeft: element.get("bidDateTimeLeft"),
     );
@@ -37,12 +35,11 @@ class BiddingProductProvider with ChangeNotifier {
   List<ProductModel> cellPhonesProductsList = [];
   fitchCellPhonesProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("CellPhonesProducts")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -70,12 +67,11 @@ class BiddingProductProvider with ChangeNotifier {
 
   fitchPadsTabletsProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("PadsAndTabletsProducts")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -96,12 +92,11 @@ class BiddingProductProvider with ChangeNotifier {
 
   fitchLaptopsProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("LaptopsProducts")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -123,12 +118,11 @@ class BiddingProductProvider with ChangeNotifier {
 
   fitchSmartWatchesProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("SmartWatches")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -149,12 +143,11 @@ class BiddingProductProvider with ChangeNotifier {
 
   fitchDesktopsProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("Desktops")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -175,12 +168,11 @@ class BiddingProductProvider with ChangeNotifier {
 
   fitchAccessoriesProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("Accessories")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {
@@ -201,12 +193,11 @@ class BiddingProductProvider with ChangeNotifier {
 
   fitchPartsProducts() async {
     List<ProductModel> newList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firebaseFireStore
+        .collection("TradeInProducts")
+        .doc("FrY6ftMAx233dpQTwZac")
         .collection("Parts")
-        .where('productShopkeeperUid', isEqualTo: _auth)
-        // .where('higherBidder', isNotEqualTo: '')
-        .where('IsStartingBid', isEqualTo: true)
-        .where('productSold', isEqualTo: false)
+        // .where('productSold', isEqualTo: false)
         .get();
 
     for (var element in snapshot.docs) {

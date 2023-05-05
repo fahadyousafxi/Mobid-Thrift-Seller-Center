@@ -7,8 +7,8 @@ import 'package:mobidthrift_seller_center/ui/Reviews_Page.dart';
 import '../constants/App_colors.dart';
 import '../ui/About_Us.dart';
 import '../ui/Contact_Us.dart';
+import '../ui/Orders.dart';
 import '../ui/Trade_In_Page.dart';
-import '../ui/Your_Cart.dart';
 
 class MyAppbar {
   /// My App Bar
@@ -132,8 +132,8 @@ class MyAppbar {
               title: const Text('Orders'),
               onTap: () {
                 Navigator.pop(context);
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => Orders()));
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => Orders()));
               },
             ),
             Divider(
@@ -169,7 +169,7 @@ class MyAppbar {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ReviewsPage()));
+                        builder: (context) => SellersReviewPage()));
               },
             ),
             // Divider(
@@ -193,23 +193,25 @@ class MyAppbar {
               height: 1,
               thickness: 2,
             ),
-            ListTile(
-              textColor: AppColors.drawerTextColor,
-              iconColor: AppColors.drawerIconColor,
-              leading: const Icon(Icons.shopping_cart),
-              title: const Text('Cart'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const YourCart()));
-              },
-            ),
 
-            Divider(
-              color: AppColors.drawerDividerColor,
-              height: 1,
-              thickness: 2,
-            ),
+            /// cart
+            // ListTile(
+            //   textColor: AppColors.drawerTextColor,
+            //   iconColor: AppColors.drawerIconColor,
+            //   leading: const Icon(Icons.shopping_cart),
+            //   title: const Text('Cart'),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => const YourCart()));
+            //   },
+            // ),
+            //
+            // Divider(
+            //   color: AppColors.drawerDividerColor,
+            //   height: 1,
+            //   thickness: 2,
+            // ),
             ListTile(
               textColor: AppColors.drawerTextColor,
               iconColor: AppColors.drawerIconColor,

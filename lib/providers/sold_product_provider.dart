@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../models/sold_product_model.dart';
 
 class SoldProductProvider with ChangeNotifier {
   final _firebaseFireStore = FirebaseFirestore.instance;
+  final String _auth = FirebaseAuth.instance.currentUser!.uid.toString();
+
   SoldProductModel? productModel;
 
   List<SoldProductModel> searchProductsList = [];
@@ -40,6 +43,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("CellPhonesProducts")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
@@ -70,6 +74,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("PadsAndTabletsProducts")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
@@ -93,6 +98,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("LaptopsProducts")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
@@ -117,6 +123,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("SmartWatches")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
@@ -140,6 +147,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("Desktops")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
@@ -163,6 +171,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("Accessories")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
@@ -186,6 +195,7 @@ class SoldProductProvider with ChangeNotifier {
     List<SoldProductModel> newList = [];
     QuerySnapshot snapshot = await _firebaseFireStore
         .collection("Parts")
+        .where('productShopkeeperUid', isEqualTo: _auth)
         .where('productSold', isEqualTo: true)
         .get();
 
