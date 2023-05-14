@@ -303,7 +303,7 @@ class _SoldOrdersState extends State<SoldOrders> {
                                                 ),
 
                                                 Text(
-                                                    'Product Price:  ${data.productShipping}'),
+                                                    'Product Shipping:  ${data.productShipping}'),
                                                 Divider(
                                                   thickness: 3,
                                                 ),

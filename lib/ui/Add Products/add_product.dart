@@ -463,31 +463,34 @@ class _AddProductState extends State<AddProduct> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("PTA Approved"),
-                      Switch(
-                          value: ptaApproved,
-                          onChanged: (bool) {
-                            setState(() {
-                              ptaApproved == false
-                                  ? ptaApproved = true
-                                  : ptaApproved = false;
-                            });
-                          }),
-                      ptaApproved == true
-                          ? const Icon(
-                              Icons.check,
-                              color: Colors.green,
-                            )
-                          : const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                            ),
-                      Text(ptaApproved == false ? 'No' : 'Yes'),
-                    ],
-                  ),
+                  widget.productCollectionName == 'CellPhonesProducts' ||
+                          widget.productCollectionName ==
+                              'PadsAndTabletsProducts' ||
+                          widget.productCollectionName == 'SmartWatches'
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("PTA Approved"),
+                            Switch(
+                                value: ptaApproved,
+                                onChanged: (bool) {
+                                  setState(() {
+                                    ptaApproved = !ptaApproved;
+                                  });
+                                }),
+                            ptaApproved == true
+                                ? const Icon(
+                                    Icons.check,
+                                    color: Colors.green,
+                                  )
+                                : const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.red,
+                                  ),
+                            Text(ptaApproved == false ? 'No' : 'Yes'),
+                          ],
+                        )
+                      : SizedBox(),
                   const SizedBox(
                     height: 10,
                   ),
