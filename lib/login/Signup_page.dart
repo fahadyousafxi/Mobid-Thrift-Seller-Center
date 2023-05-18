@@ -888,6 +888,9 @@ class _SignupPageState extends State<SignupPage> {
         'CNIC_Image1': downloadImageUrl2,
         'CNIC_Image2': downloadImageUrl1,
         'Shop_Image1': downloadImageUrl,
+        'Total_Number_of_Reviews': 0,
+        'Total_Review_Rating': 0,
+        'Followers': [],
         'location_address': {
           'latitude': locationData.locationLatitude!,
           'longitude': locationData.locationLongitude!,
