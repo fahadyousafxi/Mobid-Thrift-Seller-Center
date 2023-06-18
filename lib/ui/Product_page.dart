@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/appbar/my_drawer.dart';
 
 import '../appbar/My_appbar.dart';
 import '../constants/App_colors.dart';
@@ -27,7 +28,7 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppbar().myAppBar(context),
-      drawer: MyAppbar().myDrawer(context),
+      drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

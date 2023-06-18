@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/appbar/my_drawer.dart';
 
 import '../appbar/My_appbar.dart';
 import '../constants/App_colors.dart';
@@ -17,7 +18,7 @@ class _ViewMorePageState extends State<ViewMorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppbar().myAppBar(context),
-      drawer: MyAppbar().myDrawer(context),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobidthrift_seller_center/appbar/my_drawer.dart';
 import 'package:mobidthrift_seller_center/ui/Product_page_copy.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +56,7 @@ class _TradeInPageState extends State<TradeInPage> {
       appBar: MyAppbar().myAppBar(
         context,
       ),
-      drawer: MyAppbar().myDrawer(context),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: SingleChildScrollView(

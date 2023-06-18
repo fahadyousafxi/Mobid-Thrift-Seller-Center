@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mobidthrift_seller_center/appbar/my_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/seller_provider.dart';
@@ -35,7 +36,7 @@ class _SellersReviewPageState extends State<SellersReviewPage> {
 
     return Scaffold(
       appBar: MyAppbar().myAppBar(context),
-      drawer: MyAppbar().myDrawer(context),
+      drawer: MyDrawer(),
       body: Padding(
         padding:
             const EdgeInsets.only(left: 25.0, right: 25, bottom: 15, top: 20),

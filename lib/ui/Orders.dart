@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
+import 'package:mobidthrift_seller_center/appbar/my_drawer.dart';
 import 'package:mobidthrift_seller_center/ui/Add%20Products/add_product_screen.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Online_Orders.dart';
 import 'package:mobidthrift_seller_center/ui/Orders%20Classes/Sold_Orders.dart';
@@ -30,7 +31,7 @@ class _OrdersState extends State<Orders> with SingleTickerProviderStateMixin {
       length: 2,
       child: Scaffold(
         appBar: MyAppbar().myAppBar(context),
-        drawer: MyAppbar().myDrawer(context),
+        drawer: MyDrawer(),
         body: Column(
           children: [
             TabBar(
