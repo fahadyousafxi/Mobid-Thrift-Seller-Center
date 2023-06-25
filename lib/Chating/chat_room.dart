@@ -8,16 +8,16 @@ import 'message_bubble.dart';
 class ChatRoom extends StatefulWidget {
   // late Map<String, dynamic> userMap;
   String? chatRoomId;
-  String? buyerName;
-  String? buyerEmail;
-  String? buyerUid;
-  String? buyerPhoto;
+  String? receiverName;
+  String? receiverEmail;
+  String? receiverUid;
+  String? receiverPhoto;
   ChatRoom(
       {required this.chatRoomId,
-      required this.buyerEmail,
-      required this.buyerUid,
-      required this.buyerPhoto,
-      required this.buyerName,
+      required this.receiverEmail,
+      required this.receiverUid,
+      required this.receiverPhoto,
+      required this.receiverName,
       Key? key})
       : super(key: key);
 
@@ -31,21 +31,58 @@ class _ChatRoomState extends State<ChatRoom> {
 
   final TextEditingController _message = TextEditingController();
   void onSendMessage() async {
-    var singleMessageUid = DateTime.now().millisecondsSinceEpoch;
-    await _firebaseFireStore
-        .collection('ChatRoom')
-        .doc(widget.chatRoomId.toString())
-        .collection('chats')
-        .doc(singleMessageUid.toString())
-        .set({
-      'sendBy': _firebaseAuth.currentUser?.displayName.toString(),
-      'sendByEmail': _firebaseAuth.currentUser?.email.toString(),
-      'message': _message.text,
-      'time': FieldValue.serverTimestamp(),
-      'singleMessageUid': singleMessageUid,
-    });
+    if (_message.text.isNotEmpty) {
+      var singleMessageUid = DateTime.now().millisecondsSinceEpoch;
+      int todayTime = singleMessageUid;
+      String message = _message.text.toString();
+      _message.clear();
+      debugPrint(message);
 
-    _message.clear();
+      await _firebaseFireStore
+          .collection('ChatRoom')
+          .doc(widget.chatRoomId.toString())
+          .collection('chats')
+          .doc(singleMessageUid.toString())
+          .set({
+        'sendBy': _firebaseAuth.currentUser?.displayName.toString(),
+        'sendByEmail': _firebaseAuth.currentUser?.email.toString(),
+        'message': message,
+        'time': FieldValue.serverTimestamp(),
+        'singleMessageUid': singleMessageUid,
+      });
+
+      // update in my end
+      _firebaseFireStore
+          .collection('SellerCenterUsers')
+          .doc(_firebaseAuth.currentUser?.uid)
+          .collection('ChatUsers')
+          .doc(widget.chatRoomId)
+          .update({
+        'seenMessage': true,
+        'lastMessage': message,
+        'lastMessageTime': todayTime,
+
+        // 'userName': _firebaseAuth.currentUser?.displayName.toString(),
+      });
+
+      // update in receiver end
+      _firebaseFireStore
+          .collection('users')
+          .doc(widget.receiverUid)
+          .collection('ChatUsers')
+          .doc(widget.chatRoomId)
+          .update({
+        'seenMessage': false,
+        'lastMessage': message,
+        'lastMessageTime': todayTime,
+
+        // 'userName': _firebaseAuth.currentUser?.displayName.toString(),
+      });
+      debugPrint(message);
+      debugPrint(todayTime.toString());
+    } else {
+      debugPrint('Message is empty');
+    }
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -55,35 +92,30 @@ class _ChatRoomState extends State<ChatRoom> {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     // });
+
     _firebaseFireStore
         .collection('SellerCenterUsers')
-        .doc(widget.buyerUid)
+        .doc(_firebaseAuth.currentUser?.uid)
         .collection('ChatUsers')
         .doc(widget.chatRoomId)
         .update({
-      // 'buyerName': widget.buyerName,
-      'sellerName': _firebaseAuth.currentUser?.displayName.toString(),
-      'sellerUid': _firebaseAuth.currentUser?.uid,
-      // 'buyerUid': widget.buyerUid,
-      // 'buyerPhoto': widget.buyerPhoto,
-      'sellerPhoto': '${_firebaseAuth.currentUser?.photoURL}',
-      'roomUId': widget.chatRoomId,
-      // 'userEmail': widget.buyerEmail,
-      'sellerEmail': _firebaseAuth.currentUser?.email
+      'seenMessage': true,
+      // 'userName': _firebaseAuth.currentUser?.displayName.toString(),
     });
-    _firebaseFireStore
-        .collection('ChatRoom')
-        .doc(widget.chatRoomId.toString())
-        .update({
-      // 'buyerName': widget.buyerName,
-      'sellerName': _firebaseAuth.currentUser?.displayName.toString(),
-      'sellerUid': _firebaseAuth.currentUser?.uid,
-      // 'buyerUid': widget.buyerUid,
-      // 'buyerPhoto': widget.buyerPhoto,
-      // 'userEmail':  widget.buyerEmail,
-      'sellerEmail': _firebaseAuth.currentUser?.email
-      // 'sellerPhoto': '',
-    });
+
+    // _firebaseFireStore
+    //     .collection('ChatRoom')
+    //     .doc(widget.chatRoomId.toString())
+    //     .update({
+    //   // 'buyerName': widget.buyerName,
+    //   // 'userName': _firebaseAuth.currentUser?.displayName.toString(),
+    //   // 'sellerUid': _firebaseAuth.currentUser?.uid,
+    //   // 'buyerUid': widget.buyerUid,
+    //   // 'buyerPhoto': widget.buyerPhoto,
+    //   // 'userEmail':  widget.buyerEmail,
+    //   // 'sellerEmail': _firebaseAuth.currentUser?.email
+    //   // 'sellerPhoto': '',
+    // });
     super.initState();
   }
 
@@ -91,7 +123,7 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppbar().mySimpleAppBar(context,
-          title: widget.buyerName.toString(), showCart: false),
+          title: '${widget.receiverName.toString()}', showCart: false),
       body: Column(
         children: [
           Expanded(
@@ -114,8 +146,8 @@ class _ChatRoomState extends State<ChatRoom> {
                     itemBuilder: (BuildContext context, int index) {
                       return MessageBubble(
                           message: snapshot.data?.docs[index]['message'],
-                          username: widget.buyerName.toString(),
-                          sellerName: displayName,
+                          username: displayName,
+                          sellerName: widget.receiverName.toString(),
                           isMe: snapshot.data?.docs[index]['sendByEmail']
                                       .toString() ==
                                   _firebaseAuth.currentUser?.email
@@ -152,6 +184,9 @@ class _ChatRoomState extends State<ChatRoom> {
                 ),
                 IconButton(
                     onPressed: () {
+                      // print(widget.receiverUid);
+                      // print(widget.receiverName);
+                      // print(_firebaseAuth.currentUser?.uid);
                       onSendMessage();
                     },
                     icon: const Icon(Icons.send))
