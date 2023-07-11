@@ -31,7 +31,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   final TextEditingController _message = TextEditingController();
   void onSendMessage() async {
-    if (_message.text.isNotEmpty) {
+    if (_message.text.trim().isNotEmpty) {
       var singleMessageUid = DateTime.now().millisecondsSinceEpoch;
       int todayTime = singleMessageUid;
       String message = _message.text.toString();

@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobidthrift_seller_center/appbar/My_appbar.dart';
 import 'package:mobidthrift_seller_center/appbar/my_drawer.dart';
 import 'package:mobidthrift_seller_center/ui/Product_page_copy.dart';
 import 'package:provider/provider.dart';
 
-import '../appbar/My_appbar.dart';
 import '../constants/App_widgets.dart';
 import '../providers/Product_Provider.dart';
 

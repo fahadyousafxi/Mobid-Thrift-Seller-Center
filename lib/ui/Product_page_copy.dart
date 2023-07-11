@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../Chating/chat_room.dart';
 import '../appbar/My_appbar.dart';
+import '../constants/App_colors.dart';
 import '../constants/App_widgets.dart';
 
 class ProductPageCopy extends StatefulWidget {
@@ -115,59 +117,114 @@ class _ProductPageCopyState extends State<ProductPageCopy> {
     return Scaffold(
       appBar: MyAppbar().myAppBar(context),
       // drawer: MyDrawer(),
-      // floatingActionButton: CircleAvatar(
-      //     backgroundColor: Colors.transparent,
-      //     radius: 50,
-      //     child: IconButton(
-      //         onPressed: () async {
-      //           String roomId = chatRoomId(
-      //               _auth!.uid, widget.productShopkeeperUid.toString());
-      //           _fireStoreInstance
-      //               .collection('users')
-      //               .doc(_auth!.uid)
-      //               .collection('ChatUsers')
-      //               .doc(roomId)
-      //               .set({
-      //             'buyerName': _auth?.displayName.toString(),
-      //             'sellerName': widget.name,
-      //             'sellerUid': widget.uId,
-      //             'buyerUid': _auth?.uid,
-      //             'buyerPhoto': _auth?.photoURL,
-      //             'sellerPhoto': '${widget.profileImage}',
-      //             'roomUId': roomId,
-      //             'userEmail': _auth?.email,
-      //             'sellerEmail': widget.email
-      //           });
-      //           _fireStoreInstance.collection('ChatRoom').doc(roomId).set({
-      //             'buyerName': _auth?.displayName.toString(),
-      //             'sellerName': widget.name,
-      //             'sellerUid': widget.uId,
-      //             'buyerUid': _auth?.uid,
-      //             'buyerPhoto': _auth?.photoURL,
-      //             'sellerPhoto': '${widget.profileImage}',
-      //             'userEmail': _auth?.email,
-      //             'sellerEmail': widget.email
-      //           });
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //               builder: (context) => ChatRoom(
-      //                 chatRoomId: roomId,
-      //                 sellerEmail: widget.email,
-      //                 sellerName: widget.name, sellerUid: widget.uId,
-      //                 sellerPhoto: '${widget.profileImage}', buyerEmail: '', buyerUid: '', buyerPhoto: '', buyerName: '',
-      //                 // name: widget.name,
-      //                 // uId: widget.uId,
-      //                 // key: widget.key,
-      //               ),
-      //             ),
-      //           );
-      //         },
-      //         icon: Icon(
-      //           Icons.chat,
-      //           size: 35,
-      //           color: AppColors.myIconColor,
-      //         ))),
+      floatingActionButton: FutureBuilder<DocumentSnapshot>(
+          future: _fireStoreSnapshot
+              .collection('users')
+              .doc(widget.productShopkeeperUid)
+              .get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(
+                  child: CircularProgressIndicator(
+                color: Colors.blue,
+              ));
+
+            if (snapshot.hasError) return Center(child: Text('Some Error'));
+
+            return CircleAvatar(
+                backgroundColor: Colors.transparent,
+                radius: 50,
+                child: IconButton(
+                    onPressed: () async {
+                      debugPrint('********************************');
+                      debugPrint(widget.productShopkeeperUid);
+                      debugPrint(snapshot.data!['Email']);
+                      debugPrint('********************************');
+                      String roomId = chatRoomId(
+                          _auth!.uid, widget.productShopkeeperUid.toString());
+                      _fireStoreInstance
+                          .collection('users')
+                          .doc(snapshot.data!['Uid'].toString())
+                          .collection('ChatUsers')
+                          .doc(roomId)
+                          .set({
+                        // 'buyerName': _auth?.displayName.toString(),
+                        'adminName': _auth?.displayName,
+                        'adminUid': _auth?.uid,
+                        'userUid': snapshot.data!['Uid'],
+                        // 'buyerPhoto': _auth?.photoURL,
+                        'sellerPhoto': _auth?.photoURL,
+                        'roomUId': roomId,
+                        'userEmail': snapshot.data!['Email'],
+                        'adminEmail': _auth?.email,
+                        'seenMessage': true,
+                        'lastMessage': '',
+                      });
+                      _fireStoreInstance
+                          .collection('SellerCenterUsers')
+                          .doc(_auth!.uid)
+                          .collection('ChatUsers')
+                          .doc(roomId)
+                          .set({
+                        // 'sellerName': _firebaseAuth.currentUser?.displayName.toString(),
+                        'adminName': snapshot.data!['Name'],
+                        'adminUid': snapshot.data!['Uid'],
+                        'userUid': _auth?.uid,
+                        'userPhoto': '${snapshot.data!['Profile_Image']}',
+                        // 'sellerPhoto': widget.profileImage,
+                        'roomUId': roomId,
+                        'userEmail': _auth?.email,
+                        'adminEmail': snapshot.data!['Email'],
+                        'seenMessage': true,
+                        'lastMessage': '',
+                        // 'sellerEmail': _firebaseAuth.currentUser?.email
+                      });
+
+                      _fireStoreInstance
+                          .collection('ChatRoom')
+                          .doc(roomId)
+                          .set({
+                        // 'buyerName': _auth?.displayName.toString(),
+                        // 'sellerName': snapshot.data!['Name'],
+                        // 'sellerUid': snapshot.data!['Uid'],
+                        // 'buyerUid': _auth?.uid,
+                        // 'buyerPhoto': _auth?.photoURL,
+                        // 'sellerPhoto': '${snapshot.data!['Profile_Image']}',
+                        // 'userEmail': _auth?.email,
+                        // 'sellerEmail': snapshot.data!['Email'],
+
+                        'userName': _auth?.displayName.toString(),
+                        'adminName': snapshot.data!['Name'],
+                        'adminUid': snapshot.data!['Uid'],
+                        'userUid': _auth?.uid,
+                        'userPhoto': _auth?.photoURL,
+                        'roomUId': roomId,
+                        'userEmail': _auth?.email,
+                        'adminEmail': snapshot.data!['Email'],
+                        'seenMessage': true,
+                        'lastMessage': '',
+                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatRoom(
+                            chatRoomId: roomId,
+                            receiverEmail: snapshot.data!['Email'],
+                            receiverUid: snapshot.data!['Uid'],
+                            receiverPhoto: '${snapshot.data!['Profile_Image']}',
+                            receiverName: snapshot.data!['Name'],
+                          ),
+                        ),
+                      );
+                    },
+                    icon: Icon(
+                      Icons.chat,
+                      size: 35,
+                      color: AppColors.myIconColor,
+                    )));
+          }),
+
       body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

@@ -50,7 +50,7 @@ class ChatsProvider with ChangeNotifier {
   void getCreateNewChatsData() async {
     List<ChatsModel> newList = [];
     QuerySnapshot chatData =
-        await FirebaseFirestore.instance.collection("users").get();
+        await FirebaseFirestore.instance.collection("SellerCenterUsers").get();
 
     for (var element in chatData.docs) {
       ChatsModel chatsModel = ChatsModel(
