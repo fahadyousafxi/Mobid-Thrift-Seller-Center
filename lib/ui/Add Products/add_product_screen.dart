@@ -3,7 +3,6 @@ import 'package:mobidthrift_seller_center/ui/Add%20Products/add_product.dart';
 
 import '../../appbar/My_appbar.dart';
 import '../../constants/App_colors.dart';
-import '../../constants/App_widgets.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -36,15 +35,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => AddProduct(
-                                  productCollectionName: 'PadsAndTabletsProducts',
+                                  productCollectionName:
+                                      'PadsAndTabletsProducts',
                                 )));
                   },
                   btnText: 'Pads & Tablets',
@@ -52,9 +50,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -68,9 +64,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -84,9 +78,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -100,9 +92,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -116,9 +106,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-              AppWidgets().myElevatedBTN(
+              myBTN(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -132,12 +120,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
               SizedBox(
                 height: 22,
               ),
-
-
-
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget myBTN(
+      {var loading, required btnText, required var onPressed, var btnColor}) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        width: 200,
+        height: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            gradient: LinearGradient(colors: [Colors.blue, Colors.red])),
+        child: loading == true
+            ? const Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: Colors.white,
+                ),
+              )
+            : Center(
+                child: Text(
+                btnText,
+                style: TextStyle(color: Colors.white),
+              )),
       ),
     );
   }
