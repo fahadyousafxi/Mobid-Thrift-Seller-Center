@@ -234,11 +234,17 @@ class _EditProductState extends State<EditProduct> {
                       labelText: 'Title',
                       controller: _titleController,
                       validator: (String? txt) {
+                        bool isTitleValid =
+                            RegExp(r'^[a-zA-Z]+[0-9]*$').hasMatch(txt!);
+
+                        if (isTitleValid) {
+                          return null;
+                        }
                         if (txt == null || txt.isEmpty) {
                           return "Please provide the title";
                         }
 
-                        return null;
+                        return 'Should be a valid name of the device';
                       },
                       fillColor: Colors.grey.shade300,
                       labelColor: Colors.black,

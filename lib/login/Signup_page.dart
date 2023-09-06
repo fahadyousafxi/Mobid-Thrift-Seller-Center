@@ -569,11 +569,16 @@ class _SignupPageState extends State<SignupPage> {
                         labelText: 'Full Name',
                         controller: _nameController,
                         validator: (String? txt) {
+                          bool isNameValid =
+                              RegExp(r'^[a-zA-Z\s]+$').hasMatch(txt!);
                           if (txt == null || txt.isEmpty) {
                             return "Please provide your name";
                           }
 
-                          return null;
+                          if (isNameValid) {
+                            return null;
+                          }
+                          return 'Name Should be in alphabetic';
                         },
                       ),
                       const SizedBox(
@@ -609,8 +614,10 @@ class _SignupPageState extends State<SignupPage> {
                           if (txt == null || txt.isEmpty) {
                             return "Please provide your phone number";
                           }
-
-                          return null;
+                          if (txt.length == 11) {
+                            return null;
+                          }
+                          return 'Phone Number should be 11 digits';
                         },
                       ),
                       const SizedBox(
@@ -666,6 +673,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
 
                       AppWidgets().myTextFormField(
+                        myType: TextInputType.phone,
                         hintText: 'Enter your CNIC Number',
                         labelText: 'CNIC',
                         controller: _cNICController,
@@ -673,8 +681,10 @@ class _SignupPageState extends State<SignupPage> {
                           if (txt == null || txt.isEmpty) {
                             return "Please provide your CNIC Number";
                           }
-
-                          return null;
+                          if (txt.length == 13) {
+                            return null;
+                          }
+                          return "Please provide valid CNIC Number";
                         },
                       ),
 
@@ -818,7 +828,7 @@ class _SignupPageState extends State<SignupPage> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.camera_alt),
-                  title: const Text('With Camera'),
+                  title: const Text('Open Camera'),
                   onTap: () {
                     if (functionNumber == 1) {
                       pickImageFrom(ImageSource.camera);
@@ -831,21 +841,24 @@ class _SignupPageState extends State<SignupPage> {
                     Navigator.pop(context);
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.storage),
-                  title: const Text('From Gallery'),
-                  onTap: () {
-                    if (functionNumber == 1) {
-                      pickImageFrom(ImageSource.gallery);
-                    } else if (functionNumber == 2) {
-                      cNIC2ImageFrom(ImageSource.gallery);
-                    } else {
-                      cNIC1ImageFrom(ImageSource.gallery);
-                    }
-
-                    Navigator.pop(context);
-                  },
-                ),
+                SizedBox(
+                  height: 22,
+                )
+                // ListTile(
+                //   leading: const Icon(Icons.storage),
+                //   title: const Text('From Gallery'),
+                //   onTap: () {
+                //     if (functionNumber == 1) {
+                //       pickImageFrom(ImageSource.gallery);
+                //     } else if (functionNumber == 2) {
+                //       cNIC2ImageFrom(ImageSource.gallery);
+                //     } else {
+                //       cNIC1ImageFrom(ImageSource.gallery);
+                //     }
+                //
+                //     Navigator.pop(context);
+                //   },
+                // ),
               ],
             ),
           );
