@@ -435,7 +435,7 @@ class _AddProductState extends State<AddProduct> {
                     borderSideColor: Colors.black,
                     textColor: Colors.black,
                     validator: (String? txt) {
-                      if (txt == null || txt.isEmpty) {
+                      if (txt == null || txt.isEmpty || txt.length > 9999999) {
                         return "Please provide price";
                       }
 
